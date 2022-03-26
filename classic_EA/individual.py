@@ -23,10 +23,27 @@ class Individual:
             0.5 * (cos(2 * pi * self.chromosomes[0].get_decimal()) + cos(
                 2 * pi * self.chromosomes[1].get_decimal()))) + 20 + exp(1)
 
-    def cross(self, ind1, ind2, cross):
+    def cross_one_point(self, ind1, ind2, cross, left_cross):
         for i in range(len(self.chromosomes)):
-            self.chromosomes[i].genes[:(cross[i])] = ind1.chromosomes[i].genes[:(cross[i])]
-            self.chromosomes[i].genes[(cross[i]):] = ind2.chromosomes[i].genes[(cross[i]):]
+            if left_cross:
+                self.chromosomes[i].genes[:(cross[i])] = ind1.chromosomes[i].genes[:(cross[i])]
+                self.chromosomes[i].genes[(cross[i]):] = ind2.chromosomes[i].genes[(cross[i]):]
+            else:
+                self.chromosomes[i].genes[:(cross[i])] = ind2.chromosomes[i].genes[:(cross[i])]
+                self.chromosomes[i].genes[(cross[i]):] = ind1.chromosomes[i].genes[(cross[i]):]
+
+    def cross_two_points(self, ind1, ind2, cross, center_cross):
+        for i in range(len(self.chromosomes)):
+            if center_cross:
+                self.chromosomes[i].genes[:(cross[i][0])] = ind1.chromosomes[i].genes[:(cross[i][0])]
+                self.chromosomes[i].genes[(cross[i][0]):(cross[i][1])] = ind2.chromosomes[i].genes[
+                                                                         (cross[i][0]):(cross[i][1])]
+                self.chromosomes[i].genes[(cross[i][1]):] = ind1.chromosomes[i].genes[(cross[i][1]):]
+            else:
+                self.chromosomes[i].genes[:(cross[i][0])] = ind2.chromosomes[i].genes[:(cross[i][0])]
+                self.chromosomes[i].genes[(cross[i][0]):(cross[i][1])] = ind1.chromosomes[i].genes[
+                                                                         (cross[i][0]):(cross[i][1])]
+                self.chromosomes[i].genes[(cross[i][1]):] = ind2.chromosomes[i].genes[(cross[i][1]):]
 
     def mutate(self, mutation):
         for i in range(len(self.chromosomes)):
