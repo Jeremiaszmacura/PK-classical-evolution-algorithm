@@ -68,8 +68,16 @@ class ClassicEA:
                 self.population.individuals.append(new_population.individuals[i])
 
     def crossover_three_points(self, new_population):
-        # TODO
-        pass
+        self.population.individuals = new_population.individuals[:]
+        while len(self.population.individuals) < self.number_of_population:
+            i = randint(0, len(new_population.individuals) - 1)
+            rand = random()
+            if rand < self.cross_probability:
+                j = randint(0, len(new_population.individuals) - 1)
+                cross = np.random.randint(self.length_of_chromosome - 1, size=(2, 3))
+                self.population.cross_three_points(new_population.individuals[i], new_population.individuals[j], cross)
+            else:
+                self.population.individuals.append(new_population.individuals[i])
 
     def crossover_uniform(self, new_population):
         # TODO

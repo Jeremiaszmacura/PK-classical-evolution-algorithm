@@ -35,15 +35,33 @@ class Individual:
     def cross_two_points(self, ind1, ind2, cross, center_cross):
         for i in range(len(self.chromosomes)):
             if center_cross:
+                self.chromosomes[i].genes[:(cross[i].min())] = ind1.chromosomes[i].genes[:(cross[i].min())]
+                self.chromosomes[i].genes[(cross[i].min()):(cross[i].max())] = ind2.chromosomes[i].genes[
+                                                                               (cross[i].min()):(cross[i].max())]
+                self.chromosomes[i].genes[(cross[i].max()):] = ind1.chromosomes[i].genes[(cross[i].max()):]
+            else:
+                self.chromosomes[i].genes[:(cross[i].min())] = ind2.chromosomes[i].genes[:(cross[i].min())]
+                self.chromosomes[i].genes[(cross[i].min()):(cross[i].max())] = ind1.chromosomes[i].genes[
+                                                                               (cross[i].min()):(cross[i].max())]
+                self.chromosomes[i].genes[(cross[i].max()):] = ind2.chromosomes[i].genes[(cross[i].max()):]
+
+    def cross_three_points(self, ind1, ind2, cross, left_cross):
+        for i in range(len(self.chromosomes)):
+            cross[i].sort()
+            if left_cross:
                 self.chromosomes[i].genes[:(cross[i][0])] = ind1.chromosomes[i].genes[:(cross[i][0])]
                 self.chromosomes[i].genes[(cross[i][0]):(cross[i][1])] = ind2.chromosomes[i].genes[
                                                                          (cross[i][0]):(cross[i][1])]
-                self.chromosomes[i].genes[(cross[i][1]):] = ind1.chromosomes[i].genes[(cross[i][1]):]
+                self.chromosomes[i].genes[(cross[i][1]):(cross[i][2])] = ind1.chromosomes[i].genes[
+                                                                         (cross[i][1]):(cross[i][2])]
+                self.chromosomes[i].genes[(cross[i][2]):] = ind2.chromosomes[i].genes[(cross[i][2]):]
             else:
                 self.chromosomes[i].genes[:(cross[i][0])] = ind2.chromosomes[i].genes[:(cross[i][0])]
                 self.chromosomes[i].genes[(cross[i][0]):(cross[i][1])] = ind1.chromosomes[i].genes[
                                                                          (cross[i][0]):(cross[i][1])]
-                self.chromosomes[i].genes[(cross[i][1]):] = ind2.chromosomes[i].genes[(cross[i][1]):]
+                self.chromosomes[i].genes[(cross[i][1]):(cross[i][2])] = ind2.chromosomes[i].genes[
+                                                                         (cross[i][1]):(cross[i][2])]
+                self.chromosomes[i].genes[(cross[i][2]):] = ind1.chromosomes[i].genes[(cross[i][2]):]
 
     def mutate(self, mutation):
         for i in range(len(self.chromosomes)):

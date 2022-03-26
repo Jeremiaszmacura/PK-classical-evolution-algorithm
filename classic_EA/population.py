@@ -46,3 +46,12 @@ class Population:
         self.individuals.append(individual1)
         if len(self.individuals) < self.number_of_population:
             self.individuals.append(individual2)
+
+    def cross_three_points(self, ind1, ind2, cross):
+        individual1 = Individual(self.a, self.b, self.length_of_chromosome)
+        individual2 = Individual(self.a, self.b, self.length_of_chromosome)
+        individual1.cross_three_points(ind1, ind2, cross, True)
+        individual2.cross_three_points(ind1, ind2, cross, False)
+        self.individuals.append(individual1)
+        if len(self.individuals) < self.number_of_population:
+            self.individuals.append(individual2)
