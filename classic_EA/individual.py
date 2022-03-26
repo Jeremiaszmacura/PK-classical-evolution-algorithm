@@ -75,6 +75,11 @@ class Individual:
         for i in range(len(self.chromosomes)):
             self.chromosomes[i].genes[mutation[i]].inverse()
 
+    def mutate_two_points(self, mutation):
+        for i in range(len(self.chromosomes)):
+            self.chromosomes[i].genes[mutation[i][0]].inverse()
+            self.chromosomes[i].genes[mutation[i][1]].inverse()
+
     def inverse(self, inversion):
         for i in range(len(self.chromosomes)):
             self.chromosomes[i].inverse(inversion[i])

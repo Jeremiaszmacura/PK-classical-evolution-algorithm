@@ -105,8 +105,11 @@ class ClassicEA:
                 individual.mutate(mutation)
 
     def mutation_two_points(self):
-        # TODO
-        pass
+        for individual in self.population.individuals:
+            rand = random()
+            if rand < self.mutation_probability:
+                mutation = np.random.randint(self.length_of_chromosome - 1, size=(2,2))
+                individual.mutate_two_points(mutation)
 
     def inversion(self):
         for individual in self.population.individuals:
@@ -119,7 +122,7 @@ class ClassicEA:
         self.population.generate_individuals()
         selection_name = 'best'
         crossover_name = 'uniform'
-        mutation_name = 'edge'
+        mutation_name = 'two_points'
         for i in range(self.epochs):
             new_population = Population(self.a, self.b, self.number_of_population, self.length_of_chromosome)
 
