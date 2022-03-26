@@ -4,9 +4,9 @@ from classic_EA.chromosome import Chromosome
 
 
 class Individual:
-    def __init__(self, a, b, length_of_chromosome):
-        self.a = a
-        self.b = b
+    def __init__(self, length_of_chromosome):
+        self.a = -40
+        self.b = 40
         self.length_of_chromosome = length_of_chromosome
         self.chromosomes = [Chromosome(self.a, self.b, self.length_of_chromosome),
                             Chromosome(self.a, self.b, self.length_of_chromosome)]

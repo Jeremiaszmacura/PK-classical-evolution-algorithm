@@ -32,6 +32,6 @@ def classic_EA_api(request):
     #     classicEA_obj = ClassicEA(**data)
     #     classicEA_obj.proces_classic_EA()
     #     return JsonResponse(data)
-    classicEA_obj = ClassicEA(-40, 40, 20, 25, 500, 0.8, 0.3, 0.3, 0.1, 0.1)
+    classicEA_obj = ClassicEA(20, 25, 500, 0.8, 0.3, 0.3, 0.1, 0.1, 5, 'tournament', 'two_points', 'two_points')
     classicEA_obj.run()
     return JsonResponse({"message": "GET request to classic-EA"})
