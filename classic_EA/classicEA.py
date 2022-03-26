@@ -91,8 +91,11 @@ class ClassicEA:
                 self.population.individuals.append(new_population.individuals[i])
 
     def mutation_edge(self):
-        # TODO
-        pass
+        for individual in self.population.individuals:
+            rand = random()
+            if rand < self.mutation_probability:
+                mutation = [self.length_of_chromosome - 1, self.length_of_chromosome - 1]
+                individual.mutate(mutation)
 
     def mutation_one_point(self):
         for individual in self.population.individuals:
@@ -116,7 +119,7 @@ class ClassicEA:
         self.population.generate_individuals()
         selection_name = 'best'
         crossover_name = 'uniform'
-        mutation_name = 'one_point'
+        mutation_name = 'edge'
         for i in range(self.epochs):
             new_population = Population(self.a, self.b, self.number_of_population, self.length_of_chromosome)
 
