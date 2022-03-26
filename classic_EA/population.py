@@ -55,3 +55,12 @@ class Population:
         self.individuals.append(individual1)
         if len(self.individuals) < self.number_of_population:
             self.individuals.append(individual2)
+
+    def cross_uniform(self, ind1, ind2):
+        individual1 = Individual(self.a, self.b, self.length_of_chromosome)
+        individual2 = Individual(self.a, self.b, self.length_of_chromosome)
+        individual1.cross_uniform(ind1, ind2, True)
+        individual2.cross_uniform(ind1, ind2, False)
+        self.individuals.append(individual1)
+        if len(self.individuals) < self.number_of_population:
+            self.individuals.append(individual2)

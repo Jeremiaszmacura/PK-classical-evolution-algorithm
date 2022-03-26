@@ -63,6 +63,14 @@ class Individual:
                                                                          (cross[i][1]):(cross[i][2])]
                 self.chromosomes[i].genes[(cross[i][2]):] = ind1.chromosomes[i].genes[(cross[i][2]):]
 
+    def cross_uniform(self, ind1, ind2, left_cross):
+        for i in range(len(self.chromosomes)):
+            for gene in range(len(self.chromosomes[i].genes)):
+                if gene % 2 == left_cross:
+                    self.chromosomes[i].genes[gene] = ind1.chromosomes[i].genes[gene]
+                else:
+                    self.chromosomes[i].genes[gene] = ind2.chromosomes[i].genes[gene]
+
     def mutate(self, mutation):
         for i in range(len(self.chromosomes)):
             self.chromosomes[i].genes[mutation[i]].inverse()

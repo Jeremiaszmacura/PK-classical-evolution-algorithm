@@ -80,8 +80,15 @@ class ClassicEA:
                 self.population.individuals.append(new_population.individuals[i])
 
     def crossover_uniform(self, new_population):
-        # TODO
-        pass
+        self.population.individuals = new_population.individuals[:]
+        while len(self.population.individuals) < self.number_of_population:
+            i = randint(0, len(new_population.individuals) - 1)
+            rand = random()
+            if rand < self.cross_probability:
+                j = randint(0, len(new_population.individuals) - 1)
+                self.population.cross_uniform(new_population.individuals[i], new_population.individuals[j])
+            else:
+                self.population.individuals.append(new_population.individuals[i])
 
     def mutation_edge(self):
         # TODO
@@ -108,7 +115,7 @@ class ClassicEA:
     def run(self):
         self.population.generate_individuals()
         selection_name = 'best'
-        crossover_name = 'two_points'
+        crossover_name = 'uniform'
         mutation_name = 'one_point'
         for i in range(self.epochs):
             new_population = Population(self.a, self.b, self.number_of_population, self.length_of_chromosome)
