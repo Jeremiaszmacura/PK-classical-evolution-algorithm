@@ -3,20 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from classic_EA.classicEA import ClassicEA
 
-{
-  "number_of_population": 20,
-  "length_of_chromosome": 25,
-  "epochs": 500,
-  "cross_probability": 0.8,
-  "mutation_probability": 0.3,
-  "inversion_probability": 0.3,
-  "selection_best_percent": 0.1,
-  "elitist_strategy_percent": 0.1,
-  "size_of_tournament": 5,
-  "selection_name": "tournament",
-  "crossover_name": "two_points",
-  "mutation_name": "two_points"
-}
+
 @csrf_exempt 
 def classic_EA_api(request):
     """Api endpoint controller for classical evolution-algorithm"""
