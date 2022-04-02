@@ -13,7 +13,7 @@ class ClassicEA:
         self.cross_probability = kwargs.get('cross_probability')
         self.mutation_probability = kwargs.get('mutation_probability')
         self.inversion_probability = kwargs.get('inversion_probability')
-        self.selection_best_percent = kwargs.get('selection_percent')
+        self.selection_percent = kwargs.get('selection_percent')
         self.elitist_strategy_percent = kwargs.get('elitist_strategy_percent')
         self.size_of_tournament = kwargs.get('size_of_tournament')
         self.selection_name = kwargs.get('selection_name')
