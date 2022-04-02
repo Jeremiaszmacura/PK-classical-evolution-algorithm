@@ -6,19 +6,21 @@ from classic_EA.population import Population
 
 
 class ClassicEA:
-    def __init__(self, **kwargs):
-        self.number_of_population = kwargs.get('number_of_population')
-        self.length_of_chromosome = kwargs.get('length_of_chromosome')
-        self.epochs = kwargs.get('epochs')
-        self.cross_probability = kwargs.get('cross_probability')
-        self.mutation_probability = kwargs.get('mutation_probability')
-        self.inversion_probability = kwargs.get('inversion_probability')
-        self.selection_best_percent = kwargs.get('selection_best_percent')
-        self.elitist_strategy_percent = kwargs.get('elitist_strategy_percent')
-        self.size_of_tournament = kwargs.get('size_of_tournament')
-        self.selection_name = kwargs.get('selection_name')
-        self.crossover_name = kwargs.get('crossover_name')
-        self.mutation_name = kwargs.get('mutation_name')
+    def __init__(self, number_of_population, length_of_chromosome, epochs, cross_probability,
+                 mutation_probability, inversion_probability, selection_percent, elitist_strategy_percent,
+                 size_of_tournament, selection_name, crossover_name, mutation_name):
+        self.number_of_population = number_of_population
+        self.length_of_chromosome = length_of_chromosome
+        self.epochs = epochs
+        self.cross_probability = cross_probability
+        self.mutation_probability = mutation_probability
+        self.inversion_probability = inversion_probability
+        self.selection_percent = selection_percent
+        self.elitist_strategy_percent = elitist_strategy_percent
+        self.size_of_tournament = size_of_tournament
+        self.selection_name = selection_name
+        self.crossover_name = crossover_name
+        self.mutation_name = mutation_name
         self.population = Population(self.number_of_population, self.length_of_chromosome)
 
     def elitist_strategy(self, new_population):
@@ -33,11 +35,25 @@ class ClassicEA:
     def selection_best(self, new_population):
         self.population.individuals.sort(key=lambda x: x.fitness_function())
         new_population.individuals += self.population.individuals[
-                                      :int(self.selection_best_percent * self.number_of_population)]
+                                      :int(self.selection_percent * self.number_of_population)]
         return new_population
 
     def selection_roulette(self, new_population):
-        # TODO
+        fitness_functions_sum = 0
+        for individual in self.population.individuals:
+            fitness_functions_sum += 1.0 / individual.fitness_function()
+        probabilities = []
+        for individual in self.population.individuals:
+            probabilities.append(1.0 / individual.fitness_function() / fitness_functions_sum)
+        while len(new_population.individuals) + len(
+                new_population.elitist_strategy_individuals) < self.number_of_population * self.selection_percent:
+            rand = random()
+            probabilities_sum = 0.0
+            for individual in self.population.individuals:
+                probabilities_sum += 1.0 / individual.fitness_function()
+                if rand < probabilities_sum:
+                    new_population.individuals += individual
+                    break
 
         return new_population
 

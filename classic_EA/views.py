@@ -9,7 +9,7 @@ def classic_EA_api(request):
     """Api endpoint controller for classical evolution-algorithm"""
     if request.method == "POST":
         required_params = ("number_of_population", "length_of_chromosome", "epochs", "cross_probability", "mutation_probability", "inversion_probability",
-                           "selection_best_percent", "elitist_strategy_percent", "size_of_tournament", "selection_name", "crossover_name", "mutation_name")
+                           "selection_percent", "elitist_strategy_percent", "size_of_tournament", "selection_name", "crossover_name", "mutation_name")
         try:
             data = json.loads(request.body)
             print(data)
