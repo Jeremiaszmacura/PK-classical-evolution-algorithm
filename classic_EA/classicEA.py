@@ -2,6 +2,7 @@ from random import randint, random
 from time import time
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from classic_EA.population import Population
 
@@ -147,6 +148,7 @@ class ClassicEA:
     def run(self):
         start = time()
         self.population.generate_individuals()
+        bests = []
         for i in range(self.epochs):
             new_population = Population(self.number_of_population, self.length_of_chromosome)
 
@@ -176,7 +178,32 @@ class ClassicEA:
                 self.mutation_two_points()
 
             self.inversion()
+            bests.append(self.get_best())
 
-        self.population.show_population()
         end = time()
+        self.make_plots(bests)
         return end - start
+
+    def get_best(self):
+        self.population.individuals += self.population.elitist_strategy_individuals
+        self.population.individuals.sort(key=lambda x: x.fitness_function())
+        return self.population.individuals[0].fitness_function()
+
+    def make_plots(self, bests):
+        self.fitness_function_plot(bests)
+        self.mean_plot(bests)
+        self.deviation_plot(bests)
+
+    def fitness_function_plot(self, bests):
+        plt.figure()
+        plt.xlabel('Epochs')
+        plt.ylabel('Fitness function')
+        plt.plot(range(len(bests)), bests)
+        plt.title('Wartości funkcji od kolejnej iteracji')
+        plt.show()
+
+    def mean_plot(self, bests):
+        pass
+
+    def deviation_plot(self, bests):
+        pass

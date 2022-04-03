@@ -43,7 +43,7 @@ const Form = () => {
                 return response.json();
             })
             .then(data => {
-                window.alert("Status: OK\nExecution time: " + data.time/1000 + " s")
+                window.alert("Status: OK\nExecution time: " + data.time + " s")
             })
     }
 
