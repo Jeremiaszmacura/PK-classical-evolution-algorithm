@@ -3,6 +3,7 @@ from time import time
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from classic_EA.population import Population
 
@@ -13,6 +14,9 @@ def make_plots(bests, individuals):
     fitness_function_plot(bests)
     mean_plot(individuals)
     deviation_plot(individuals)
+    df = pd.DataFrame(individuals)
+    filepath = 'data.xlsx'
+    df.to_excel(filepath, index=False)
 
 
 def fitness_function_plot(bests):
