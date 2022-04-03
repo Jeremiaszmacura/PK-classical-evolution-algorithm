@@ -113,7 +113,7 @@ const Form = () => {
                 </form>
                 <form className={style.form}>
                     <div className={style.formInputs}>
-                        <label className={style.formLabel}>Selection best percent</label>
+                        <label className={style.formLabel}>Selection percent</label>
                         <input
                             className={style.formInput}
                             type='number'
