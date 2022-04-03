@@ -8,18 +8,18 @@ from classic_EA.population import Population
 
 class ClassicEA:
     def __init__(self, **kwargs):
-        self.number_of_population = kwargs.get('number_of_population')
-        self.length_of_chromosome = kwargs.get('length_of_chromosome')
-        self.epochs = kwargs.get('epochs')
-        self.cross_probability = kwargs.get('cross_probability')
-        self.mutation_probability = kwargs.get('mutation_probability')
-        self.inversion_probability = kwargs.get('inversion_probability')
-        self.selection_percent = kwargs.get('selection_percent')
-        self.elitist_strategy_percent = kwargs.get('elitist_strategy_percent')
-        self.size_of_tournament = kwargs.get('size_of_tournament')
-        self.selection_name = kwargs.get('selection_name')
-        self.crossover_name = kwargs.get('crossover_name')
-        self.mutation_name = kwargs.get('mutation_name')
+        self.number_of_population = int(kwargs.get('numberOfPopulation'))
+        self.length_of_chromosome = int(kwargs.get('lengthOfChromosome'))
+        self.epochs = int(kwargs.get('epochs'))
+        self.cross_probability = float(kwargs.get('crossProbability'))
+        self.mutation_probability = float(kwargs.get('mutationProbability'))
+        self.inversion_probability = float(kwargs.get('inversionProbability'))
+        self.selection_percent = float(kwargs.get('selectionPercent'))
+        self.elitist_strategy_percent = float(kwargs.get('elitistStrategyPercent'))
+        self.size_of_tournament = int(kwargs.get('sizeOfTournament'))
+        self.selection_name = kwargs.get('selectionName')
+        self.crossover_name = kwargs.get('crossoverName')
+        self.mutation_name = kwargs.get('mutationName')
         self.population = Population(self.number_of_population, self.length_of_chromosome)
 
     def elitist_strategy(self, new_population):
@@ -179,4 +179,4 @@ class ClassicEA:
 
         self.population.show_population()
         end = time()
-        print(end - start)
+        return end - start
