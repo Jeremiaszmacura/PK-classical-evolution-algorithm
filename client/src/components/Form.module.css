@@ -2,7 +2,7 @@
     margin: 0 auto;
     color: #00185a;
     width: 200px;
-    height: 200px;
+    height: 400px;
     display: flex;
     flex-direction: column;
 }
@@ -49,18 +49,27 @@
 button {
     background-color: #00185a;
     color: white;
-    height: 70px;
+    height: 50px;
+    width: 520px;
     padding: 5px;
     border-radius: 20px;
     outline: none;
     border: none;
     font-size: 18px;
     font-weight: bold;
-    margin-top: 5px;
+    margin: 10px auto;
 }
 
 button:hover {
     cursor: pointer;
     background: #6482cb;
     transition: all 0.3s ease-out;
+}
+
+.flexContainer {
+    display: flex;
+}
+
+.content {
+    text-align: center;
 }
