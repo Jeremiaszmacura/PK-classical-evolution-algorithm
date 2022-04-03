@@ -97,7 +97,7 @@ class ClassicEA:
             for individual in self.population.individuals:
                 probabilities_sum += 1.0 / individual.fitness_function()
                 if rand < probabilities_sum:
-                    new_population.individuals += individual
+                    new_population.individuals.append(individual)
                     break
 
         return new_population
