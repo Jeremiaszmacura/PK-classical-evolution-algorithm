@@ -19,7 +19,7 @@ class Individual:
 
     def fitness_function(self):
         return -20 * exp(
-            -0.2 * sqrt(0.5 * (self.chromosomes[0].get_decimal() ** 2) + self.chromosomes[1].get_decimal() ** 2)) - exp(
+            -0.2 * sqrt(0.5 * (self.chromosomes[0].get_decimal() ** 2 + self.chromosomes[1].get_decimal() ** 2))) - exp(
             0.5 * (cos(2 * pi * self.chromosomes[0].get_decimal()) + cos(
                 2 * pi * self.chromosomes[1].get_decimal()))) + 20 + exp(1)
 
