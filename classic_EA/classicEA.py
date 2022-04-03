@@ -1,4 +1,5 @@
 from random import randint, random
+from time import time
 
 import numpy as np
 
@@ -144,6 +145,7 @@ class ClassicEA:
                 individual.inverse(inversion)
 
     def run(self):
+        start = time()
         self.population.generate_individuals()
         for i in range(self.epochs):
             new_population = Population(self.number_of_population, self.length_of_chromosome)
@@ -176,3 +178,5 @@ class ClassicEA:
             self.inversion()
 
         self.population.show_population()
+        end = time()
+        print(end - start)
