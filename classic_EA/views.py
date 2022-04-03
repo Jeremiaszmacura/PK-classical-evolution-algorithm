@@ -12,7 +12,6 @@ def classic_EA_api(request):
                            "selectionPercent", "elitistStrategyPercent", "sizeOfTournament", "selectionName", "crossoverName", "mutationName")
         try:
             data = json.loads(request.body)
-            print(data)
             if not all(param in data for param in required_params):
                 return JsonResponse({"message": "Missing at least one of required params"})
             classicEA_obj = ClassicEA(**data)
