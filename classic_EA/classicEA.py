@@ -42,7 +42,7 @@ def deviation_plot(individuals):
         deviations.append(np.std(epoch))
     plt.figure()
     plt.xlabel('Epochs')
-    plt.ylabel('Mean')
+    plt.ylabel('Standard deviation')
     plt.plot(range(len(deviations)), deviations)
     plt.title('Odchylenie standardowe funkcji osobników od kolejnej iteracji')
     plt.show()
