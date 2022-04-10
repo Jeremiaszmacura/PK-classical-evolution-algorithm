@@ -157,7 +157,7 @@ class ClassicEA:
             rand = random()
             if rand < self.cross_probability:
                 j = randint(0, len(new_population.individuals) - 1)
-                self.population.cross_average(new_population.individuals[i], new_population.individuals[j], cross)
+                self.population.cross_average(new_population.individuals[i], new_population.individuals[j])
             else:
                 self.population.add_individuals(new_population.individuals[i])
 
