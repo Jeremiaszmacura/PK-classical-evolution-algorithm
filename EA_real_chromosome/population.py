@@ -53,3 +53,9 @@ class Population:
         self.individuals.append(individuals[0])
         if len(self.individuals) < self.number_of_population:
             self.individuals.append(individuals[1])
+
+    def cross_average(self, ind1, ind2):
+        individual1 = Individual()
+        individual1.chromosomes = np.copy(np.array(
+            [0.5 * (ind1.chromosomes[0] + ind2.chromosomes[0]), 0.5 * (ind1.chromosomes[1] + ind2.chromosomes[1])]))
+        self.individuals.append(individual1)

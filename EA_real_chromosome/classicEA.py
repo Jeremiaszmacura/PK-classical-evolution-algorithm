@@ -157,8 +157,7 @@ class ClassicEA:
             rand = random()
             if rand < self.cross_probability:
                 j = randint(0, len(new_population.individuals) - 1)
-            #     cross = np.random.randint(self.length_of_chromosome - 1, size=(2, 3))
-            #     self.population.cross_three_points(new_population.individuals[i], new_population.individuals[j], cross)
+                self.population.cross_average(new_population.individuals[i], new_population.individuals[j], cross)
             else:
                 self.population.add_individuals(new_population.individuals[i])
 
@@ -223,6 +222,7 @@ class ClassicEA:
 
             bests.append(self.get_best())
             individuals.append(self.get_all_individuals())
+            # TODO po krzyżowaniu i mutacji sprawdzić zakres (-40;40) i ewentualnie poprawić
 
         end = time()
         self.population.show_population()
