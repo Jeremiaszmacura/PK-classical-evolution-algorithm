@@ -39,3 +39,17 @@ class Population:
         self.individuals.append(individual1)
         if len(self.individuals) < self.number_of_population:
             self.individuals.append(individual2)
+
+    def cross_linear(self, ind1, ind2):
+        individuals = []
+        [individuals.append(Individual()) for _ in range(3)]
+        individuals[0].chromosomes = np.copy(np.array([0.5 * ind1.chromosomes[0] + 0.5 * ind2.chromosomes[0],
+                                                       0.5 * ind1.chromosomes[1] + 0.5 * ind2.chromosomes[1]]))
+        individuals[1].chromosomes = np.copy(np.array([1.5 * ind1.chromosomes[0] - 0.5 * ind2.chromosomes[0],
+                                                       1.5 * ind1.chromosomes[1] - 0.5 * ind2.chromosomes[1]]))
+        individuals[2].chromosomes = np.copy(np.array([-0.5 * ind1.chromosomes[0] + 1.5 * ind2.chromosomes[0],
+                                                       -0.5 * ind1.chromosomes[1] + 1.5 * ind2.chromosomes[1]]))
+        individuals.sort(key=lambda ind: ind.fitness_function())
+        self.individuals.append(individuals[0])
+        if len(self.individuals) < self.number_of_population:
+            self.individuals.append(individuals[1])
