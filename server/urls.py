@@ -18,5 +18,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('classic-EA/', include('classic_EA.urls'))
+    path('classic-EA/', include('classic_EA.urls')),
+    path('EA-real_chromosome/', include('EA-real_chromosome.urls'))
 ]
