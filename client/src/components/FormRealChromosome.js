@@ -63,15 +63,6 @@ const Form = () => {
                         />
                     </div>
                     <div className={style.formInputs}>
-                        <label className={style.formLabel}>Length of chromosome</label>
-                        <input
-                            className={style.formInput}
-                            type='number'
-                            value={lengthOfChromosome}
-                            onChange={(e => setLengthOfChromosome(e.target.value))}
-                        />
-                    </div>
-                    <div className={style.formInputs}>
                         <label className={style.formLabel}>Epochs</label>
                         <input
                             className={style.formInput}
@@ -101,18 +92,6 @@ const Form = () => {
                         />
                     </div>
                     <div className={style.formInputs}>
-                        <label className={style.formLabel}>Inversion Probability</label>
-                        <input
-                            className={style.formInput}
-                            type='number'
-                            value={inversionProbability}
-                            step={"0.01"}
-                            onChange={(e => setInversionProbability(e.target.value))}
-                        />
-                    </div>
-                </form>
-                <form className={style.form}>
-                    <div className={style.formInputs}>
                         <label className={style.formLabel}>Selection percent</label>
                         <input
                             className={style.formInput}
@@ -122,6 +101,8 @@ const Form = () => {
                             onChange={(e => setSelectionPercent(e.target.value))}
                         />
                     </div>
+                </form>
+                <form className={style.form}>
                     <div className={style.formInputs}>
                         <label className={style.formLabel}>Elitist Strategy Percent</label>
                         <input
