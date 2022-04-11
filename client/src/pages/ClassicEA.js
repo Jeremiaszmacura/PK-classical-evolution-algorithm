@@ -4,7 +4,7 @@ const ClassicEA = () => {
 
     return (
         <div className="home-page">
-            <h1>HOME PAGE Classic EA</h1>
+            <h1>Classic EA</h1>
             <Form/>
         </div>
     );

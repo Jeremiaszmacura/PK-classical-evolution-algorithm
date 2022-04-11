@@ -15,6 +15,9 @@ const MainNavigation = () => {
                     <li>
                         <Link to='/classic-EA'>Classical EA</Link>
                     </li>
+                    <li>
+                        <Link to='/real-chromosome-EA'>Real Chromosome EA</Link>
+                    </li>
                 </ul>
             </nav>
         </header>
