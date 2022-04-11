@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from classic_EA.population import Population
+from EA_real_chromosome.population import Population
 
 
 def make_plots(bests, individuals):
@@ -55,18 +55,16 @@ def deviation_plot(individuals):
 class ClassicEA:
     def __init__(self, **kwargs):
         self.number_of_population = int(kwargs.get('numberOfPopulation'))
-        self.length_of_chromosome = int(kwargs.get('lengthOfChromosome'))
         self.epochs = int(kwargs.get('epochs'))
         self.cross_probability = float(kwargs.get('crossProbability'))
         self.mutation_probability = float(kwargs.get('mutationProbability'))
-        self.inversion_probability = float(kwargs.get('inversionProbability'))
         self.selection_percent = float(kwargs.get('selectionPercent'))
         self.elitist_strategy_percent = float(kwargs.get('elitistStrategyPercent'))
         self.size_of_tournament = int(kwargs.get('sizeOfTournament'))
         self.selection_name = kwargs.get('selectionName')
         self.crossover_name = kwargs.get('crossoverName')
         self.mutation_name = kwargs.get('mutationName')
-        self.population = Population(self.number_of_population, self.length_of_chromosome)
+        self.population = Population(self.number_of_population)
 
     def elitist_strategy(self, new_population):
         self.population.individuals += self.population.elitist_strategy_individuals
@@ -115,88 +113,87 @@ class ClassicEA:
             new_population.individuals.append(individuals_group[index_min])
         return new_population
 
-    def crossover_one_point(self, new_population):
-        self.population.individuals = new_population.individuals[:]
+    def crossover_arithmetic(self, new_population):
+        self.population.add_individuals(new_population.individuals)
         while len(self.population.individuals) < self.number_of_population:
             i = randint(0, len(new_population.individuals) - 1)
             rand = random()
             if rand < self.cross_probability:
                 j = randint(0, len(new_population.individuals) - 1)
-                cross = np.random.randint(self.length_of_chromosome - 1, size=2)
-                self.population.cross_one_point(new_population.individuals[i], new_population.individuals[j], cross)
+                k = random()
+                if k == 0.0:
+                    k = 0.5
+                self.population.cross_arithmetic(new_population.individuals[i], new_population.individuals[j], k)
             else:
-                self.population.individuals.append(new_population.individuals[i])
+                self.population.add_individuals(new_population.individuals[i])
 
-    def crossover_two_points(self, new_population):
-        self.population.individuals = new_population.individuals[:]
+    def crossover_linear(self, new_population):
+        self.population.add_individuals(new_population.individuals)
         while len(self.population.individuals) < self.number_of_population:
             i = randint(0, len(new_population.individuals) - 1)
             rand = random()
             if rand < self.cross_probability:
                 j = randint(0, len(new_population.individuals) - 1)
-                cross = np.random.randint(self.length_of_chromosome - 1, size=(2, 2))
-                self.population.cross_two_points(new_population.individuals[i], new_population.individuals[j], cross)
+                self.population.cross_linear(new_population.individuals[i], new_population.individuals[j])
             else:
-                self.population.individuals.append(new_population.individuals[i])
+                self.population.add_individuals(new_population.individuals[i])
 
-    def crossover_three_points(self, new_population):
-        self.population.individuals = new_population.individuals[:]
+    def crossover_blend_alpha(self, new_population):
+        self.population.add_individuals(new_population.individuals)
         while len(self.population.individuals) < self.number_of_population:
             i = randint(0, len(new_population.individuals) - 1)
             rand = random()
             if rand < self.cross_probability:
                 j = randint(0, len(new_population.individuals) - 1)
-                cross = np.random.randint(self.length_of_chromosome - 1, size=(2, 3))
-                self.population.cross_three_points(new_population.individuals[i], new_population.individuals[j], cross)
+            #     cross = np.random.randint(self.length_of_chromosome - 1, size=(2, 3))
+            #     self.population.cross_three_points(new_population.individuals[i], new_population.individuals[j], cross)
             else:
-                self.population.individuals.append(new_population.individuals[i])
+                self.population.add_individuals(new_population.individuals[i])
 
-    def crossover_uniform(self, new_population):
-        self.population.individuals = new_population.individuals[:]
+    def crossover_average(self, new_population):
+        self.population.add_individuals(new_population.individuals)
         while len(self.population.individuals) < self.number_of_population:
             i = randint(0, len(new_population.individuals) - 1)
             rand = random()
             if rand < self.cross_probability:
                 j = randint(0, len(new_population.individuals) - 1)
-                self.population.cross_uniform(new_population.individuals[i], new_population.individuals[j])
+                self.population.cross_average(new_population.individuals[i], new_population.individuals[j])
             else:
-                self.population.individuals.append(new_population.individuals[i])
+                self.population.add_individuals(new_population.individuals[i])
 
-    def mutation_edge(self):
+    def crossover_blend_alpha_beta(self, new_population):
+        self.population.add_individuals(new_population.individuals)
+        while len(self.population.individuals) < self.number_of_population:
+            i = randint(0, len(new_population.individuals) - 1)
+            rand = random()
+            if rand < self.cross_probability:
+                j = randint(0, len(new_population.individuals) - 1)
+            #     self.population.cross_uniform(new_population.individuals[i], new_population.individuals[j])
+            else:
+                self.population.add_individuals(new_population.individuals[i])
+
+    def mutation_uniform(self):
         for individual in self.population.individuals:
             rand = random()
-            if rand < self.mutation_probability:
-                mutation = [self.length_of_chromosome - 1, self.length_of_chromosome - 1]
-                individual.mutate(mutation)
+            # if rand < self.mutation_probability:
+            #     mutation = [self.length_of_chromosome - 1, self.length_of_chromosome - 1]
+            #     individual.mutate(mutation)
 
-    def mutation_one_point(self):
+    def mutation_gauss(self):
         for individual in self.population.individuals:
             rand = random()
-            if rand < self.mutation_probability:
-                mutation = np.random.randint(self.length_of_chromosome - 1, size=2)
-                individual.mutate(mutation)
-
-    def mutation_two_points(self):
-        for individual in self.population.individuals:
-            rand = random()
-            if rand < self.mutation_probability:
-                mutation = np.random.randint(self.length_of_chromosome - 1, size=(2, 2))
-                individual.mutate_two_points(mutation)
-
-    def inversion(self):
-        for individual in self.population.individuals:
-            rand = random()
-            if rand < self.inversion_probability:
-                inversion = np.random.randint(self.length_of_chromosome - 1, size=(2, 2))
-                individual.inverse(inversion)
+            # if rand < self.mutation_probability:
+            #     mutation = np.random.randint(self.length_of_chromosome - 1, size=2)
+            #     individual.mutate(mutation)
 
     def run(self):
-        start = time()
         self.population.generate_individuals()
         bests = []
         individuals = []
+        start = time()
+
         for i in range(self.epochs):
-            new_population = Population(self.number_of_population, self.length_of_chromosome)
+            new_population = Population(self.number_of_population)
 
             new_population = self.elitist_strategy(new_population)
 
@@ -207,27 +204,28 @@ class ClassicEA:
             elif self.selection_name == 'tournament':
                 new_population = self.selection_tournament(new_population)
 
-            if self.crossover_name == 'one_point':
-                self.crossover_one_point(new_population)
-            elif self.crossover_name == 'two_points':
-                self.crossover_two_points(new_population)
-            elif self.crossover_name == 'three_points':
-                self.crossover_three_points(new_population)
-            elif self.crossover_name == 'uniform':
-                self.crossover_uniform(new_population)
+            if self.crossover_name == 'arithmetic':
+                self.crossover_arithmetic(new_population)
+            elif self.crossover_name == 'linear':
+                self.crossover_linear(new_population)
+            elif self.crossover_name == 'beta_alpha':
+                self.crossover_blend_alpha(new_population)
+            elif self.crossover_name == 'blend_alpha_beta':
+                self.crossover_blend_alpha_beta(new_population)
+            elif self.crossover_name == 'average':
+                self.crossover_average(new_population)
 
-            if self.mutation_name == 'edge':
-                self.mutation_edge()
-            elif self.mutation_name == 'one_point':
-                self.mutation_one_point()
-            elif self.mutation_name == 'two_points':
-                self.mutation_two_points()
+            if self.mutation_name == 'uniform':
+                self.mutation_uniform()
+            elif self.mutation_name == 'gauss':
+                self.mutation_gauss()
 
-            self.inversion()
             bests.append(self.get_best())
             individuals.append(self.get_all_individuals())
+            # TODO po krzyżowaniu i mutacji sprawdzić zakres (-40;40) i ewentualnie poprawić
 
         end = time()
+        self.population.show_population()
         make_plots(bests, individuals)
         return end - start
 

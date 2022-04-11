@@ -1,64 +1,61 @@
-from classic_EA.individual import Individual
+import numpy as np
+
+from EA_real_chromosome.individual import Individual
 
 
 class Population:
-    def __init__(self, number_of_population, length_of_chromosome):
+    def __init__(self, number_of_population):
         self.number_of_population = number_of_population
-        self.length_of_chromosome = length_of_chromosome
         self.individuals = []
         self.elitist_strategy_individuals = []
 
     def generate_individuals(self):
         self.individuals = []
-        [self.individuals.append(Individual(self.length_of_chromosome)) for _ in
-         range(self.number_of_population)]
+        [self.individuals.append(Individual()) for _ in range(self.number_of_population)]
 
     def show_population(self):
         print('--------------------------')
         print('|Chromosomes|')
         print('--------------------------')
-        [print(individual.get_chromosomes()) for individual in self.individuals]
-        print('--------------------------')
-        print('|Decimals|')
-        print('--------------------------')
-        [print(individual.get_decimals()) for individual in self.individuals]
+        [print(individual.chromosomes) for individual in self.individuals]
         print('--------------------------')
         print('|Fitness Function|')
         print('--------------------------')
         [print(individual.fitness_function()) for individual in self.individuals]
 
-    def cross_one_point(self, ind1, ind2, cross):
-        individual1 = Individual(self.length_of_chromosome)
-        individual2 = Individual(self.length_of_chromosome)
-        individual1.cross_one_point(ind1, ind2, cross, True)
-        individual2.cross_one_point(ind1, ind2, cross, False)
+    def add_individuals(self, individuals):
+        for individual in individuals:
+            new_individual = Individual()
+            new_individual.chromosomes = np.copy(individual.chromosomes)
+            self.individuals.append(new_individual)
+
+    def cross_arithmetic(self, ind1, ind2, k):
+        individual1 = Individual()
+        individual2 = Individual()
+        individual1.chromosomes = np.copy(np.array([k * ind1.chromosomes[0] + (1 - k) * ind2.chromosomes[0],
+                                                    k * ind1.chromosomes[1] + (1 - k) * ind2.chromosomes[1]]))
+        individual2.chromosomes = np.copy(np.array([(1 - k) * ind1.chromosomes[0] + k * ind2.chromosomes[0],
+                                                    (1 - k) * ind1.chromosomes[1] + k * ind2.chromosomes[1]]))
         self.individuals.append(individual1)
         if len(self.individuals) < self.number_of_population:
             self.individuals.append(individual2)
 
-    def cross_two_points(self, ind1, ind2, cross):
-        individual1 = Individual(self.length_of_chromosome)
-        individual2 = Individual(self.length_of_chromosome)
-        individual1.cross_two_points(ind1, ind2, cross, True)
-        individual2.cross_two_points(ind1, ind2, cross, False)
-        self.individuals.append(individual1)
+    def cross_linear(self, ind1, ind2):
+        individuals = []
+        [individuals.append(Individual()) for _ in range(3)]
+        individuals[0].chromosomes = np.copy(np.array([0.5 * ind1.chromosomes[0] + 0.5 * ind2.chromosomes[0],
+                                                       0.5 * ind1.chromosomes[1] + 0.5 * ind2.chromosomes[1]]))
+        individuals[1].chromosomes = np.copy(np.array([1.5 * ind1.chromosomes[0] - 0.5 * ind2.chromosomes[0],
+                                                       1.5 * ind1.chromosomes[1] - 0.5 * ind2.chromosomes[1]]))
+        individuals[2].chromosomes = np.copy(np.array([-0.5 * ind1.chromosomes[0] + 1.5 * ind2.chromosomes[0],
+                                                       -0.5 * ind1.chromosomes[1] + 1.5 * ind2.chromosomes[1]]))
+        individuals.sort(key=lambda ind: ind.fitness_function())
+        self.individuals.append(individuals[0])
         if len(self.individuals) < self.number_of_population:
-            self.individuals.append(individual2)
+            self.individuals.append(individuals[1])
 
-    def cross_three_points(self, ind1, ind2, cross):
-        individual1 = Individual(self.length_of_chromosome)
-        individual2 = Individual(self.length_of_chromosome)
-        individual1.cross_three_points(ind1, ind2, cross, True)
-        individual2.cross_three_points(ind1, ind2, cross, False)
+    def cross_average(self, ind1, ind2):
+        individual1 = Individual()
+        individual1.chromosomes = np.copy(np.array(
+            [0.5 * (ind1.chromosomes[0] + ind2.chromosomes[0]), 0.5 * (ind1.chromosomes[1] + ind2.chromosomes[1])]))
         self.individuals.append(individual1)
-        if len(self.individuals) < self.number_of_population:
-            self.individuals.append(individual2)
-
-    def cross_uniform(self, ind1, ind2):
-        individual1 = Individual(self.length_of_chromosome)
-        individual2 = Individual(self.length_of_chromosome)
-        individual1.cross_uniform(ind1, ind2, True)
-        individual2.cross_uniform(ind1, ind2, False)
-        self.individuals.append(individual1)
-        if len(self.individuals) < self.number_of_population:
-            self.individuals.append(individual2)
