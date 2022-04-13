@@ -145,8 +145,8 @@ class EA_real_chromosome:
             rand = random()
             if rand < self.cross_probability:
                 j = randint(0, len(new_population.individuals) - 1)
-            #     cross = np.random.randint(self.length_of_chromosome - 1, size=(2, 3))
-            #     self.population.cross_three_points(new_population.individuals[i], new_population.individuals[j], cross)
+                alpha = 0.25
+                self.population.cross_blend_alpha(new_population.individuals[i], new_population.individuals[j], alpha)
             else:
                 self.population.add_individuals(new_population.individuals[i])
 
