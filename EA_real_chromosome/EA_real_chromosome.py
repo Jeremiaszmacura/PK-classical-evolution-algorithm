@@ -168,7 +168,10 @@ class EA_real_chromosome:
             rand = random()
             if rand < self.cross_probability:
                 j = randint(0, len(new_population.individuals) - 1)
-            #     self.population.cross_uniform(new_population.individuals[i], new_population.individuals[j])
+                alpha = 0.25
+                beta = 0.7
+                self.population.cross_blend_alpha_beta(new_population.individuals[i], new_population.individuals[j],
+                                                       alpha, beta)
             else:
                 self.population.add_individuals(new_population.individuals[i])
 

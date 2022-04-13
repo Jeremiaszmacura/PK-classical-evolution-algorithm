@@ -83,3 +83,21 @@ class Population:
         self.individuals.append(individuals[0])
         if len(self.individuals) < self.number_of_population:
             self.individuals.append(individuals[1])
+
+    def cross_blend_alpha_beta(self, ind1, ind2, alpha, beta):
+        individuals = []
+        [individuals.append(Individual()) for _ in range(2)]
+        for individual in individuals:
+            x1 = np.min(ind1.chromosomes[0], ind2.chromosomes[0]) - alpha * abs(
+                ind1.chromosomes[0] - ind2.chromosomes[0])
+            x2 = np.max(ind1.chromosomes[0], ind2.chromosomes[0]) + beta * abs(
+                ind1.chromosomes[0] - ind2.chromosomes[0])
+            y1 = np.min(ind1.chromosomes[1], ind2.chromosomes[1]) - alpha * abs(
+                ind1.chromosomes[1] - ind2.chromosomes[1])
+            y2 = np.max(ind1.chromosomes[1], ind2.chromosomes[1]) + beta * abs(
+                ind1.chromosomes[1] - ind2.chromosomes[1])
+            individual.chromosomes = np.array([random() * (x2 - x1) + x1, random() * (y2 - y1) + y1])
+            individual.check_boundaries()
+        self.individuals.append(individuals[0])
+        if len(self.individuals) < self.number_of_population:
+            self.individuals.append(individuals[1])
