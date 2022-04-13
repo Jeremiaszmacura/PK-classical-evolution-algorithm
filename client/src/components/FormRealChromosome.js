@@ -5,25 +5,21 @@ import doFetch from "../services/doFetch";
 const Form = () => {
 
     const [numberOfPopulation, setNumberOfPopulation] = useState(0)
-    const [lengthOfChromosome, setLengthOfChromosome] = useState(0)
     const [epochs, setEpochs] = useState(0)
     const [crossProbability, setCrossProbability] = useState(0)
     const [mutationProbability, setMutationProbability] = useState(0)
-    const [inversionProbability, setInversionProbability] = useState(0)
     const [selectionPercent, setSelectionPercent] = useState(0)
     const [elitistStrategyPercent, setElitistStrategyPercent] = useState(0)
     const [sizeOfTournament, setSizeOfTournament] = useState(0)
     const [selectionName, setSelectionName] = useState("best")
-    const [crossoverName, setCrossoverName] = useState("onePoint")
-    const [mutationName, setMutationName] = useState("edge")
+    const [crossoverName, setCrossoverName] = useState("arithmetic")
+    const [mutationName, setMutationName] = useState("uniform")
 
     const parameters = {
         numberOfPopulation,
-        lengthOfChromosome,
         epochs,
         crossProbability,
         mutationProbability,
-        inversionProbability,
         selectionPercent,
         elitistStrategyPercent,
         sizeOfTournament,
@@ -140,10 +136,11 @@ const Form = () => {
                                 onChange={(e => setCrossoverName(e.target.value))}
                                 className={style.formInput}
                         >
-                            <option value={"one_point"}>One point</option>
-                            <option value={"two_points"}>Two points</option>
-                            <option value={"three_points"}>Three points</option>
-                            <option value={"uniform"}>Uniform</option>
+                            <option value={"arithmetic"}>Arithmetic</option>
+                            <option value={"linear"}>Linear</option>
+                            <option value={"blend_alpha"}>Blend alpha</option>
+                            <option value={"blend_alpha_beta"}>Blend alpha-beta</option>
+                            <option value={"average"}>Average</option>
                         </select>
                     </div>
                     <div className={style.formInputs}>
@@ -152,9 +149,8 @@ const Form = () => {
                                 onChange={(e => setMutationName(e.target.value))}
                                 className={style.formInput}
                         >
-                            <option value={"edge"}>Edge</option>
-                            <option value={"one_point"}>One point</option>
-                            <option value={"two_points"}>Two points</option>
+                            <option value={"uniform"}>Uniform</option>
+                            <option value={"gauss"}>Gauss</option>
                         </select>
                     </div>
                 </form>
