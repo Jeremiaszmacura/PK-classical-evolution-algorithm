@@ -222,7 +222,6 @@ class EA_real_chromosome:
 
             bests.append(self.get_best())
             individuals.append(self.get_all_individuals())
-            # TODO po krzyżowaniu i mutacji sprawdzić zakres (-40;40) i ewentualnie poprawić
 
         end = time()
         self.population.show_population()

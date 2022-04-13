@@ -36,6 +36,8 @@ class Population:
                                                     k * ind1.chromosomes[1] + (1 - k) * ind2.chromosomes[1]]))
         individual2.chromosomes = np.copy(np.array([(1 - k) * ind1.chromosomes[0] + k * ind2.chromosomes[0],
                                                     (1 - k) * ind1.chromosomes[1] + k * ind2.chromosomes[1]]))
+        individual1.check_boundaries()
+        individual2.check_boundaries()
         self.individuals.append(individual1)
         if len(self.individuals) < self.number_of_population:
             self.individuals.append(individual2)
@@ -49,6 +51,7 @@ class Population:
                                                        1.5 * ind1.chromosomes[1] - 0.5 * ind2.chromosomes[1]]))
         individuals[2].chromosomes = np.copy(np.array([-0.5 * ind1.chromosomes[0] + 1.5 * ind2.chromosomes[0],
                                                        -0.5 * ind1.chromosomes[1] + 1.5 * ind2.chromosomes[1]]))
+        [individual.check_boundaries() for individual in individuals]
         individuals.sort(key=lambda ind: ind.fitness_function())
         self.individuals.append(individuals[0])
         if len(self.individuals) < self.number_of_population:
@@ -58,4 +61,5 @@ class Population:
         individual1 = Individual()
         individual1.chromosomes = np.copy(np.array(
             [0.5 * (ind1.chromosomes[0] + ind2.chromosomes[0]), 0.5 * (ind1.chromosomes[1] + ind2.chromosomes[1])]))
+        individual1.check_boundaries()
         self.individuals.append(individual1)
