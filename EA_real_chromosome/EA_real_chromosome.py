@@ -123,19 +123,35 @@ class EA_real_chromosome:
             else:
                 self.population.add_individuals(new_population.individuals[i])
 
-    def mutation_uniform(self):
-        for individual in self.population.individuals:
-            rand = random()
-            # if rand < self.mutation_probability:
-            #     mutation = [self.length_of_chromosome - 1, self.length_of_chromosome - 1]
-            #     individual.mutate(mutation)
+    def mutation_uniform(self, new_population):
+        if self.cross_probability > 0:
+            for individual in self.population.individuals:
+                rand = random()
+                if rand < self.mutation_probability:
+                    individual.mutate_uniform()
+        else:
+            i = 0
+            while len(self.population.individuals) < self.number_of_population:
+                self.population.add_individuals([new_population.individuals[i % len(new_population.individuals)]])
+                rand = random()
+                if rand < self.mutation_probability:
+                    self.population.individuals[-1].mutate_uniform()
+                i += 1
 
-    def mutation_gauss(self):
-        for individual in self.population.individuals:
-            rand = random()
-            # if rand < self.mutation_probability:
-            #     mutation = np.random.randint(self.length_of_chromosome - 1, size=2)
-            #     individual.mutate(mutation)
+    def mutation_gauss(self, new_population):
+        if self.cross_probability > 0:
+            for individual in self.population.individuals:
+                rand = random()
+                if rand < self.mutation_probability:
+                    individual.mutate_gauss()
+        elif self.mutation_probability > 0:
+            i = 0
+            while len(self.population.individuals) < self.number_of_population:
+                self.population.add_individuals([new_population.individuals[i % len(new_population.individuals)]])
+                rand = random()
+                if rand < self.mutation_probability:
+                    self.population.individuals[-1].mutate_gauss()
+                i += 1
 
     def run(self):
         self.population.generate_individuals()
@@ -168,9 +184,9 @@ class EA_real_chromosome:
                 self.crossover_average(new_population)
 
             if self.mutation_name == 'uniform':
-                self.mutation_uniform()
+                self.mutation_uniform(new_population)
             elif self.mutation_name == 'gauss':
-                self.mutation_gauss()
+                self.mutation_gauss(new_population)
 
             bests.append(self.get_best())
             individuals.append(self.get_all_individuals())
