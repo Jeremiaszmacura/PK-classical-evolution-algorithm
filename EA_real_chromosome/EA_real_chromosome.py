@@ -77,7 +77,7 @@ class EA_real_chromosome:
                     k = 0.5
                 self.population.cross_arithmetic(new_population.individuals[i], new_population.individuals[j], k)
             else:
-                self.population.add_individuals(new_population.individuals[i])
+                self.population.add_individuals([new_population.individuals[i]])
 
     def crossover_linear(self, new_population):
         while len(self.population.individuals) < self.number_of_population:
@@ -87,7 +87,7 @@ class EA_real_chromosome:
                 j = randint(0, len(new_population.individuals) - 1)
                 self.population.cross_linear(new_population.individuals[i], new_population.individuals[j])
             else:
-                self.population.add_individuals(new_population.individuals[i])
+                self.population.add_individuals([new_population.individuals[i]])
 
     def crossover_blend_alpha(self, new_population):
         while len(self.population.individuals) < self.number_of_population:
@@ -98,7 +98,7 @@ class EA_real_chromosome:
                 alpha = 0.25
                 self.population.cross_blend_alpha(new_population.individuals[i], new_population.individuals[j], alpha)
             else:
-                self.population.add_individuals(new_population.individuals[i])
+                self.population.add_individuals([new_population.individuals[i]])
 
     def crossover_average(self, new_population):
         while len(self.population.individuals) < self.number_of_population:
@@ -108,7 +108,7 @@ class EA_real_chromosome:
                 j = randint(0, len(new_population.individuals) - 1)
                 self.population.cross_average(new_population.individuals[i], new_population.individuals[j])
             else:
-                self.population.add_individuals(new_population.individuals[i])
+                self.population.add_individuals([new_population.individuals[i]])
 
     def crossover_blend_alpha_beta(self, new_population):
         while len(self.population.individuals) < self.number_of_population:
@@ -121,7 +121,7 @@ class EA_real_chromosome:
                 self.population.cross_blend_alpha_beta(new_population.individuals[i], new_population.individuals[j],
                                                        alpha, beta)
             else:
-                self.population.add_individuals(new_population.individuals[i])
+                self.population.add_individuals([new_population.individuals[i]])
 
     def mutation_uniform(self, new_population):
         if self.cross_probability > 0:
@@ -130,13 +130,11 @@ class EA_real_chromosome:
                 if rand < self.mutation_probability:
                     individual.mutate_uniform()
         else:
-            i = 0
-            while len(self.population.individuals) < self.number_of_population:
-                self.population.add_individuals([new_population.individuals[i % len(new_population.individuals)]])
+            for individual in new_population.individuals:
+                self.population.add_individuals([individual])
                 rand = random()
                 if rand < self.mutation_probability:
                     self.population.individuals[-1].mutate_uniform()
-                i += 1
 
     def mutation_gauss(self, new_population):
         if self.cross_probability > 0:
@@ -145,13 +143,11 @@ class EA_real_chromosome:
                 if rand < self.mutation_probability:
                     individual.mutate_gauss()
         elif self.mutation_probability > 0:
-            i = 0
-            while len(self.population.individuals) < self.number_of_population:
-                self.population.add_individuals([new_population.individuals[i % len(new_population.individuals)]])
+            for individual in new_population.individuals:
+                self.population.add_individuals([individual])
                 rand = random()
                 if rand < self.mutation_probability:
                     self.population.individuals[-1].mutate_gauss()
-                i += 1
 
     def run(self):
         self.population.generate_individuals()
