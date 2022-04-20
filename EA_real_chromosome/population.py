@@ -70,13 +70,13 @@ class Population:
         individuals = []
         [individuals.append(Individual()) for _ in range(2)]
         for individual in individuals:
-            x1 = np.min(ind1.chromosomes[0], ind2.chromosomes[0]) - alpha * abs(
+            x1 = np.min([ind1.chromosomes[0], ind2.chromosomes[0]]) - alpha * abs(
                 ind1.chromosomes[0] - ind2.chromosomes[0])
-            x2 = np.max(ind1.chromosomes[0], ind2.chromosomes[0]) + alpha * abs(
+            x2 = np.max([ind1.chromosomes[0], ind2.chromosomes[0]]) + alpha * abs(
                 ind1.chromosomes[0] - ind2.chromosomes[0])
-            y1 = np.min(ind1.chromosomes[1], ind2.chromosomes[1]) - alpha * abs(
+            y1 = np.min([ind1.chromosomes[1], ind2.chromosomes[1]]) - alpha * abs(
                 ind1.chromosomes[1] - ind2.chromosomes[1])
-            y2 = np.max(ind1.chromosomes[1], ind2.chromosomes[1]) + alpha * abs(
+            y2 = np.max([ind1.chromosomes[1], ind2.chromosomes[1]]) + alpha * abs(
                 ind1.chromosomes[1] - ind2.chromosomes[1])
             individual.chromosomes = np.array([random() * (x2 - x1) + x1, random() * (y2 - y1) + y1])
             individual.check_boundaries()
@@ -88,13 +88,13 @@ class Population:
         individuals = []
         [individuals.append(Individual()) for _ in range(2)]
         for individual in individuals:
-            x1 = np.min(ind1.chromosomes[0], ind2.chromosomes[0]) - alpha * abs(
+            x1 = np.min([ind1.chromosomes[0], ind2.chromosomes[0]]) - alpha * abs(
                 ind1.chromosomes[0] - ind2.chromosomes[0])
-            x2 = np.max(ind1.chromosomes[0], ind2.chromosomes[0]) + beta * abs(
+            x2 = np.max([ind1.chromosomes[0], ind2.chromosomes[0]]) + beta * abs(
                 ind1.chromosomes[0] - ind2.chromosomes[0])
-            y1 = np.min(ind1.chromosomes[1], ind2.chromosomes[1]) - alpha * abs(
+            y1 = np.min([ind1.chromosomes[1], ind2.chromosomes[1]]) - alpha * abs(
                 ind1.chromosomes[1] - ind2.chromosomes[1])
-            y2 = np.max(ind1.chromosomes[1], ind2.chromosomes[1]) + beta * abs(
+            y2 = np.max([ind1.chromosomes[1], ind2.chromosomes[1]]) + beta * abs(
                 ind1.chromosomes[1] - ind2.chromosomes[1])
             individual.chromosomes = np.array([random() * (x2 - x1) + x1, random() * (y2 - y1) + y1])
             individual.check_boundaries()

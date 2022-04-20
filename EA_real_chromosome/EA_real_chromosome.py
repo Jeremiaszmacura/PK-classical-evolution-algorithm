@@ -1,55 +1,8 @@
 from random import randint, random
 from time import time
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-
 from EA_real_chromosome.population import Population
-
-
-def make_plots(bests, individuals):
-    bests = np.array(bests)
-    individuals = np.array(individuals)
-    fitness_function_plot(bests)
-    mean_plot(individuals)
-    deviation_plot(individuals)
-    df = pd.DataFrame(individuals)
-    filepath = 'data.xlsx'
-    df.to_excel(filepath, index=False)
-
-
-def fitness_function_plot(bests):
-    plt.figure()
-    plt.xlabel('Epochs')
-    plt.ylabel('Fitness function')
-    plt.plot(range(len(bests)), bests)
-    plt.title('Wartości funkcji najlepszego osobnika od kolejnej iteracji')
-    plt.show()
-
-
-def mean_plot(individuals):
-    means = []
-    for epoch in individuals:
-        means.append(np.mean(epoch))
-    plt.figure()
-    plt.xlabel('Epochs')
-    plt.ylabel('Mean')
-    plt.plot(range(len(means)), means)
-    plt.title('Średnia wartość funkcji osobników od kolejnej iteracji')
-    plt.show()
-
-
-def deviation_plot(individuals):
-    deviations = []
-    for epoch in individuals:
-        deviations.append(np.std(epoch))
-    plt.figure()
-    plt.xlabel('Epochs')
-    plt.ylabel('Standard deviation')
-    plt.plot(range(len(deviations)), deviations)
-    plt.title('Odchylenie standardowe funkcji osobników od kolejnej iteracji')
-    plt.show()
+from classic_EA.classicEA import make_plots
 
 
 class EA_real_chromosome:
@@ -67,18 +20,19 @@ class EA_real_chromosome:
         self.population = Population(self.number_of_population)
 
     def elitist_strategy(self, new_population):
-        self.population.individuals += self.population.elitist_strategy_individuals
+        self.population.add_individuals(self.population.elitist_strategy_individuals)
         self.population.individuals.sort(key=lambda x: x.fitness_function())
-        new_population.elitist_strategy_individuals = self.population.individuals[
-                                                      :int(self.elitist_strategy_percent * self.number_of_population)]
-        new_population.individuals += self.population.individuals[
-                                      :int(self.elitist_strategy_percent * self.number_of_population)]
+        self.population.elitist_strategy_individuals = self.population.individuals[
+                                                       :int(self.elitist_strategy_percent * self.number_of_population)]
+        new_population.individuals = self.population.individuals[
+                                     :int(self.elitist_strategy_percent * self.number_of_population)]
         return new_population
 
     def selection_best(self, new_population):
         self.population.individuals.sort(key=lambda x: x.fitness_function())
-        new_population.individuals += self.population.individuals[
-                                      :int(self.selection_percent * self.number_of_population)]
+        if int(self.selection_percent * self.number_of_population) > 0:
+            new_population.add_individuals(
+                self.population.individuals[:int(self.selection_percent * self.number_of_population)])
         return new_population
 
     def selection_roulette(self, new_population):
@@ -88,8 +42,7 @@ class EA_real_chromosome:
         probabilities = []
         for individual in self.population.individuals:
             probabilities.append(1.0 / individual.fitness_function() / fitness_functions_sum)
-        while len(new_population.individuals) + len(
-                new_population.elitist_strategy_individuals) < self.number_of_population * self.selection_percent:
+        while len(new_population.individuals) < self.number_of_population * self.selection_percent:
             rand = random()
             probabilities_sum = 0.0
             for individual in self.population.individuals:
@@ -114,7 +67,6 @@ class EA_real_chromosome:
         return new_population
 
     def crossover_arithmetic(self, new_population):
-        self.population.add_individuals(new_population.individuals)
         while len(self.population.individuals) < self.number_of_population:
             i = randint(0, len(new_population.individuals) - 1)
             rand = random()
@@ -128,7 +80,6 @@ class EA_real_chromosome:
                 self.population.add_individuals(new_population.individuals[i])
 
     def crossover_linear(self, new_population):
-        self.population.add_individuals(new_population.individuals)
         while len(self.population.individuals) < self.number_of_population:
             i = randint(0, len(new_population.individuals) - 1)
             rand = random()
@@ -139,7 +90,6 @@ class EA_real_chromosome:
                 self.population.add_individuals(new_population.individuals[i])
 
     def crossover_blend_alpha(self, new_population):
-        self.population.add_individuals(new_population.individuals)
         while len(self.population.individuals) < self.number_of_population:
             i = randint(0, len(new_population.individuals) - 1)
             rand = random()
@@ -151,7 +101,6 @@ class EA_real_chromosome:
                 self.population.add_individuals(new_population.individuals[i])
 
     def crossover_average(self, new_population):
-        self.population.add_individuals(new_population.individuals)
         while len(self.population.individuals) < self.number_of_population:
             i = randint(0, len(new_population.individuals) - 1)
             rand = random()
@@ -162,7 +111,6 @@ class EA_real_chromosome:
                 self.population.add_individuals(new_population.individuals[i])
 
     def crossover_blend_alpha_beta(self, new_population):
-        self.population.add_individuals(new_population.individuals)
         while len(self.population.individuals) < self.number_of_population:
             i = randint(0, len(new_population.individuals) - 1)
             rand = random()
@@ -197,7 +145,6 @@ class EA_real_chromosome:
 
         for i in range(self.epochs):
             new_population = Population(self.number_of_population)
-
             new_population = self.elitist_strategy(new_population)
 
             if self.selection_name == 'best':
@@ -206,6 +153,8 @@ class EA_real_chromosome:
                 new_population = self.selection_roulette(new_population)
             elif self.selection_name == 'tournament':
                 new_population = self.selection_tournament(new_population)
+
+            self.population.individuals = []
 
             if self.crossover_name == 'arithmetic':
                 self.crossover_arithmetic(new_population)

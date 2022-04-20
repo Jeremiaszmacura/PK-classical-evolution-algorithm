@@ -14,7 +14,7 @@ class Individual:
             0.5 * (cos(2 * pi * self.chromosomes[0]) + cos(2 * pi * self.chromosomes[1]))) + 20 + exp(1)
 
     def check_boundaries(self):
-        for i in self.chromosomes:
+        for i in range(self.chromosomes.size):
             if self.chromosomes[i] < self.a:
                 self.chromosomes[i] = self.a
             elif self.chromosomes[i] > self.b:
