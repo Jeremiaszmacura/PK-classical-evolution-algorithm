@@ -24,5 +24,5 @@ class Individual:
         self.chromosomes = np.random.rand(2) * (self.b - self.a) + self.a
 
     def mutate_gauss(self):
-        self.chromosomes = np.random.normal(0, 1, 2)
+        self.chromosomes += np.random.normal(0, 1, 2)
         self.check_boundaries()
