@@ -1,5 +1,6 @@
 import random
 from math import exp, sqrt, cos, pi
+import time
 
 from deap import base
 from deap import creator
@@ -189,6 +190,7 @@ def main():
     numberElitism = 1
     all_best_inds = []
     all_fits = []
+    start_time = time.time()
     while g < numberIteration:
         g = g + 1
         print("-- Generation %i --" % g)
@@ -248,6 +250,8 @@ def main():
         print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
     #
     print("-- End of (successful) evolution --")
+    end_time = time.time()
+    print(f'Evolution time: {end_time - start_time}')
     make_plots(all_best_inds, all_fits)
 
 
