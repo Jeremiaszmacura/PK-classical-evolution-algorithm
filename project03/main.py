@@ -5,6 +5,7 @@ from deap import base
 from deap import creator
 from deap import tools
 
+from project03.plots import make_plots
 
 BOUNDARIES_UP = 10
 BOUNDARIES_DOWN = -10
@@ -234,6 +235,7 @@ def main():
         print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
     #
     print("-- End of (successful) evolution --")
+    make_plots(best_ind, best_ind.fitness.values)
 
 
 if __name__ == '__main__':
