@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-server
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/workspace/app
+    ports:
+      - "8000:8000"
+  client:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-client
+    command: npm start
+    ports:
+      - "3000:3000"

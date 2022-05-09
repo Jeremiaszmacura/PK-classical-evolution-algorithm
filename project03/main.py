@@ -18,8 +18,45 @@ def check_boundaries(ind):
             ind[i] = BOUNDARIES_UP
     return ind
 
-def cross_blend_alpha(ind1, ind2):
+def cross_average(ind1, ind2):
+    new_ind = [0, 0]
+    new_ind[0] = (ind1[0] + ind2[0]) / 2
+    new_ind[1] = (ind1[1] + ind2[1]) / 2
+    new_ind = check_boundaries(new_ind)
+    return new_ind, new_ind
 
+def cross_blend_alpha_beta(ind1, ind2):
+    alpha = 0.25
+    beta = 0.7
+    new_ind1 = [0, 0]
+    new_ind2 = [0, 0]
+    x1 = min(ind1[0], ind2[0]) - alpha * abs(ind1[0] - ind2[0])
+    x2 = max(ind1[0], ind2[0]) + beta * abs(ind1[0] - ind2[0])
+    y1 = min(ind1[1], ind2[1]) - alpha * abs(ind1[1] - ind2[1])
+    y2 = max(ind1[1], ind2[1]) + beta * abs(ind1[1] - ind2[1])
+    new_ind1[0] = random.random() * (x2 - x1) + x1
+    new_ind1[1] = random.random() * (y2 - y1) + y1
+    new_ind1 = check_boundaries(new_ind1)
+    new_ind2[0] = random.random() * (x2 - x1) + x1
+    new_ind2[1] = random.random() * (y2 - y1) + y1
+    new_ind2 = check_boundaries(new_ind2)
+    return new_ind1, new_ind2
+
+def cross_blend_alpha(ind1, ind2):
+    alpha = 0.25
+    new_ind1 = [0, 0]
+    new_ind2 = [0, 0]
+    x1 = min(ind1[0], ind2[0]) - alpha * abs(ind1[0] - ind2[0])
+    x2 = max(ind1[0], ind2[0]) + alpha * abs(ind1[0] - ind2[0])
+    y1 = min(ind1[1], ind2[1]) - alpha * abs(ind1[1] - ind2[1])
+    y2 = max(ind1[1], ind2[1]) + alpha * abs(ind1[1] - ind2[1])
+    new_ind1[0] = random.random() * (x2 - x1) + x1
+    new_ind1[1] = random.random() * (y2 - y1) + y1
+    new_ind1 = check_boundaries(new_ind1)
+    new_ind2[0] = random.random() * (x2 - x1) + x1
+    new_ind2[1] = random.random() * (y2 - y1) + y1
+    new_ind2 = check_boundaries(new_ind2)
+    return new_ind1, new_ind2
 
 def cross_linear(ind1, ind2):
     # k - prawdopodobieństwo krzyżowania
@@ -95,26 +132,36 @@ def main():
     # generowanie nowych osobników
     toolbox.register('individual', individual, creator.Individual)
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+
     # wskazanie funkcji celu
     toolbox.register("evaluate", fitnessFunction)
+
     # wybieranie algorytmu selekcji
     toolbox.register("select", tools.selTournament, tournsize=3)
     # toolbox.register("select", tools.selRandom, tournsize=3)
     # toolbox.register("select", tools.selBest, tournsize=3)
     # toolbox.register("select", tools.selWorst, tournsize=3)
     # toolbox.register("select", tools.selRoulette, tournsize=3)
-    # wybieranie algorytmu krzyżowania
-    toolbox.register("mate", cross_linear)
+
+    # krzyżowanie dla rzeczywistej reprezentacji
+    toolbox.register("mate", cross_arithmetic)
+    # toolbox.register("mate", cross_linear)
+    # toolbox.register("mate", cross_blend_alpha)
+    # toolbox.register("mate", cross_blend_alpha_beta)
+    # toolbox.register("mate", cross_average)
+    # dla binarnej reprezentacji
     # toolbox.register("mate", tools.cxOnePoint)
     # toolbox.register("mate", tools.cxUniform)
     # toolbox.register("mate", tools.cxTwoPoint)
     # definicja algorytmu mutacji
-    # dla rzeczywistej reprezentacji
+
+    # mutacja dla rzeczywistej reprezentacji
     toolbox.register("mutate", tools.mutGaussian, mu=5, sigma=10)
     # toolbox.register("mutate", tools.mutUniformInt, low=-40, up=40)
     # dla binarnej reprezentacji
     # toolbox.register("mutate", tools.mutFlipBit)
     # toolbox.register("mutate", tools.mutShuffleIndexes)
+
     # konfiguracja parametów algorytmu genetycznego
     sizePopulation = 100
     probabilityMutation = 0.2
