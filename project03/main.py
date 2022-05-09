@@ -5,10 +5,10 @@ from deap import base
 from deap import creator
 from deap import tools
 
-from project03.plots import make_plots
+from plots import make_plots
 
-BOUNDARIES_UP = 10
-BOUNDARIES_DOWN = -10
+BOUNDARIES_UP = 40
+BOUNDARIES_DOWN = -40
 
 
 def check_boundaries(ind):
@@ -19,12 +19,14 @@ def check_boundaries(ind):
             ind[i] = BOUNDARIES_UP
     return ind
 
+
 def cross_average(ind1, ind2):
     new_ind = [0, 0]
     new_ind[0] = (ind1[0] + ind2[0]) / 2
     new_ind[1] = (ind1[1] + ind2[1]) / 2
     new_ind = check_boundaries(new_ind)
     return new_ind, new_ind
+
 
 def cross_blend_alpha_beta(ind1, ind2):
     alpha = 0.25
@@ -43,6 +45,7 @@ def cross_blend_alpha_beta(ind1, ind2):
     new_ind2 = check_boundaries(new_ind2)
     return new_ind1, new_ind2
 
+
 def cross_blend_alpha(ind1, ind2):
     alpha = 0.25
     new_ind1 = [0, 0]
@@ -58,6 +61,7 @@ def cross_blend_alpha(ind1, ind2):
     new_ind2[1] = random.random() * (y2 - y1) + y1
     new_ind2 = check_boundaries(new_ind2)
     return new_ind1, new_ind2
+
 
 def cross_linear(ind1, ind2):
     # k - prawdopodobieństwo krzyżowania
@@ -81,6 +85,7 @@ def cross_linear(ind1, ind2):
 
     return sorted_results[0], sorted_results[1]
 
+
 def cross_arithmetic(ind1, ind2):
     k = 0.6
     ind1_tmp = ind1
@@ -93,11 +98,13 @@ def cross_arithmetic(ind1, ind2):
     ind2 = check_boundaries(ind2)
     return ind1, ind2
 
+
 # def individual(icls):
 #     genome = list()
 #     for x in range(0, 40):
 #         genome.append(random.randint(0, 1))
 #     return icls(genome)
+
 
 def individual(icls):
     genome = list()
@@ -105,8 +112,9 @@ def individual(icls):
     genome.append(random.uniform(BOUNDARIES_DOWN, BOUNDARIES_UP))
     return icls(genome)
 
+
 def decodeInd(individual):
-    individual_len = len(individual) // 2
+    individual_len = int(len(individual) / 2)
     decoded_individual = []
     for i in range(2):
         s = 0
@@ -114,6 +122,7 @@ def decodeInd(individual):
             s = s * 2 + el
         decoded_individual.append(s / (2 ** individual_len - 1))
     return decoded_individual
+
 
 def fitnessFunction(individual):
     # tutaj rozkoduj binarnego osobnika! Napisz funkcje decodeInd
@@ -125,6 +134,7 @@ def fitnessFunction(individual):
     result = -20 * exp(-0.2 * sqrt(0.5 * (ind[0] ** 2 + ind[1] ** 2))) - exp(
         0.5 * (cos(2 * pi * ind[0]) + cos(2 * pi * ind[1]))) + 20 + exp(1)
     return result,
+
 
 def main():
     creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
@@ -177,6 +187,8 @@ def main():
     # pętla genetyczna
     g = 0
     numberElitism = 1
+    all_best_inds = []
+    all_fits = []
     while g < numberIteration:
         g = g + 1
         print("-- Generation %i --" % g)
@@ -230,12 +242,13 @@ def main():
         print("  Max %s" % max(fits))
         print("  Avg %s" % mean)
         print("  Std %s" % std)
-        print()
         best_ind = tools.selBest(pop, 1)[0]
+        all_best_inds.append(fitnessFunction(best_ind))
+        all_fits.append(fits)
         print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
     #
     print("-- End of (successful) evolution --")
-    make_plots(best_ind, best_ind.fitness.values)
+    make_plots(all_best_inds, all_fits)
 
 
 if __name__ == '__main__':
