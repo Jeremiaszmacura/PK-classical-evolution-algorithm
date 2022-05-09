@@ -149,15 +149,15 @@ def main():
     toolbox.register("evaluate", fitnessFunction)
 
     # wybieranie algorytmu selekcji
-    toolbox.register("select", tools.selTournament, tournsize=3)
-    # toolbox.register("select", tools.selRandom, tournsize=3)
-    # toolbox.register("select", tools.selBest, tournsize=3)
-    # toolbox.register("select", tools.selWorst, tournsize=3)
-    # toolbox.register("select", tools.selRoulette, tournsize=3)
+    # toolbox.register("select", tools.selTournament, tournsize=3)
+    toolbox.register("select", tools.selRandom)
+    # toolbox.register("select", tools.selBest)
+    # toolbox.register("select", tools.selWorst)
+    # toolbox.register("select", tools.selRoulette)
 
     # krzyżowanie dla rzeczywistej reprezentacji
-    toolbox.register("mate", cross_arithmetic)
-    # toolbox.register("mate", cross_linear)
+    # toolbox.register("mate", cross_arithmetic)
+    toolbox.register("mate", cross_linear)
     # toolbox.register("mate", cross_blend_alpha)
     # toolbox.register("mate", cross_blend_alpha_beta)
     # toolbox.register("mate", cross_average)
@@ -168,17 +168,17 @@ def main():
     # definicja algorytmu mutacji
 
     # mutacja dla rzeczywistej reprezentacji
-    toolbox.register("mutate", tools.mutGaussian, mu=5, sigma=10)
-    # toolbox.register("mutate", tools.mutUniformInt, low=-40, up=40)
+    # toolbox.register("mutate", tools.mutGaussian, mu=5, sigma=10)
+    toolbox.register("mutate", tools.mutUniformInt, low=-40, up=40)
     # dla binarnej reprezentacji
     # toolbox.register("mutate", tools.mutFlipBit)
     # toolbox.register("mutate", tools.mutShuffleIndexes)
 
     # konfiguracja parametów algorytmu genetycznego
     sizePopulation = 100
-    probabilityMutation = 0.2
-    probabilityCrossover = 0.8
-    numberIteration = 100
+    probabilityMutation = 0.6
+    probabilityCrossover = 0.4
+    numberIteration = 300
     # generujemy początkową populację i obliczamy jej wartość funkcji dopasowania
     pop = toolbox.population(n=sizePopulation)
     fitnesses = list(map(toolbox.evaluate, pop))
@@ -251,7 +251,7 @@ def main():
     #
     print("-- End of (successful) evolution --")
     end_time = time.time()
-    print(f'Evolution time: {end_time - start_time}')
+    print(f'Evolution time: {end_time - start_time} [ms]')
     make_plots(all_best_inds, all_fits)
 
 
