@@ -35,7 +35,27 @@ def mutationSVC(individual):
     elif numberParamer == 4:
         # coeff
         coeff = random.uniform(0.1, 1)
-        individual[2] = coeff
+        individual[4] = coeff
+    elif numberParamer == 5:
+        # shrinking
+        shrinking = random.randint(0, 1)
+        individual[5] = shrinking
+    elif numberParamer == 6:
+        # probability
+        probability = random.randint(0, 1)
+        individual[6] = probability
+    elif numberParamer == 7:
+        # random_state
+        random_state = random.randint(0, 10000)
+        individual[7] = random_state
+    # elif numberParamer == 8:
+    #     # max_iter
+    #     max_iter = random.randint(-1, 1000)
+    #     individual[8] = max_iter
+    elif numberParamer == 8:
+        # decision_function_shape
+        decision_function_shape = random.choice(['ovo', 'ovr'])
+        individual[8] = decision_function_shape
     else:  # genetyczna selekcja cech
         if individual[numberParamer] == 0:
             individual[numberParamer] = 1
@@ -57,7 +77,8 @@ def SVCParametersFitness(y, df, numberOfAtributtes, individual):
     mms = MinMaxScaler()
     df_norm = mms.fit_transform(dfSelectedFeatures)
     estimator = SVC(kernel=individual[0], C=individual[1], degree=individual[2], gamma=individual[3],
-                    coef0=individual[4], random_state=101)
+                    coef0=individual[4], shrinking=individual[5], probability=individual[6],
+                    random_state=individual[7], decision_function_shape=individual[8])
     resultSum = 0
     for train, test in cv.split(df_norm, y):
         estimator.fit(df_norm[train], y[train])
@@ -94,6 +115,26 @@ def SVCParameters(numberFeatures, icls):
     coeff = random.uniform(0.01, 10)
     genome.append(coeff)
 
+    # shrinking
+    shrinking = random.randint(0, 1)
+    genome.append(shrinking)
+
+    # probability
+    probability = random.randint(0, 1)
+    genome.append(probability)
+
+    # random_state
+    random_state = random.randint(0, 10000)
+    genome.append(random_state)
+
+    # max_iter
+    # max_iter = random.randint(-1, 1000)
+    # genome.append(max_iter)
+
+    # decision_function_shape
+    decision_function_shape = random.choice(['ovo', 'ovr'])
+    genome.append(decision_function_shape)
+
     for _ in range(0, numberFeatures):
         genome.append(random.randint(0, 1))
 
@@ -128,15 +169,15 @@ def main():
 
     # wybieranie algorytmu selekcji
     # toolbox.register("select", tools.selTournament, tournsize=3)
-    toolbox.register("select", tools.selRandom)
+    # toolbox.register("select", tools.selRandom)
     # toolbox.register("select", tools.selBest)
     # toolbox.register("select", tools.selWorst)
-    # toolbox.register("select", tools.selRoulette)
+    toolbox.register("select", tools.selRoulette)
 
     # krzyżowanie dla binarnej reprezentacji
     # toolbox.register("mate", tools.cxOnePoint)
-    toolbox.register("mate", tools.cxUniform)
-    # toolbox.register("mate", tools.cxTwoPoint)
+    # toolbox.register("mate", tools.cxUniform)
+    toolbox.register("mate", tools.cxTwoPoint)
 
     # definicja algorytmu mutacji
     toolbox.register("mutate", mutationSVC)
@@ -145,7 +186,7 @@ def main():
     sizePopulation = 100
     probabilityMutation = 0.6
     probabilityCrossover = 0.8
-    numberIteration = 5  # <- było 300
+    numberIteration = 10  # <- było 300
     # generujemy początkową populację i obliczamy jej wartość funkcji dopasowania
     pop = toolbox.population(n=sizePopulation)
 
@@ -183,8 +224,8 @@ def main():
 
             # cross two individuals with probability CXPB
             if random.random() < probabilityCrossover:
-                toolbox.mate(child1, child2, probabilityCrossover)
-                # toolbox.mate(child1, child2)
+                # toolbox.mate(child1, child2, probabilityCrossover)
+                toolbox.mate(child1, child2)
 
                 # fitness values of the children
                 # must be recalculated later
