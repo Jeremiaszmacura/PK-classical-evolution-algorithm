@@ -3,6 +3,7 @@ import time
 from math import exp, sqrt, cos, pi
 
 import pandas as pd
+import multiprocessing
 from deap import base
 from deap import creator
 from deap import tools
@@ -19,47 +20,56 @@ BOUNDARIES_DOWN = -40
 
 
 def mutationSVC(individual):
-    numberParamer = random.randint(0, len(individual) - 1)
-    if numberParamer == 0:
+    numberParamer= random.randint(0,len(individual)-1)
+    if numberParamer==0:
         # kernel
         listKernel = ["linear", "rbf", "poly", "sigmoid"]
-        individual[0] = listKernel[random.randint(0, 3)]
-    elif numberParamer == 1:
-        # C
-        k = random.uniform(0.1, 100)
-        individual[1] = k
+        individual[0]=listKernel[random.randint(0, 3)]
+    elif numberParamer==1:
+        #C
+        k = random.uniform(0.1,100)
+        individual[1]=k
     elif numberParamer == 2:
-        # degree
-        individual[2] = random.uniform(0.1, 5)
+        #degree
+        individual[2]=random.uniform(0.1, 5)
     elif numberParamer == 3:
-        # gamma
-        gamma = random.uniform(0.01, 5)
-        individual[3] = gamma
-    elif numberParamer == 4:
+        #gamma
+        gamma = random.uniform(0.01, 1)
+        individual[3]=gamma
+    elif numberParamer ==4:
         # coeff
-        coeff = random.uniform(0.1, 20)
+        coeff = random.uniform(0.1, 1)
         individual[2] = coeff
+    else: #genetyczna selekcja cech
+        if individual[numberParamer] == 0: 
+            individual[numberParamer] = 1
+        else:
+            individual[numberParamer] = 0
 
 
 def SVCParametersFitness(y, df, numberOfAtributtes, individual):
-    split = 5
+    split=5
     cv = StratifiedKFold(n_splits=split)
-    mms = MinMaxScaler()
-    df_norm = mms.fit_transform(df)
+    
+    listColumnsToDrop=[] #lista cech do usuniecia
+    for i in range(numberOfAtributtes,len(individual)):
+            if individual[i]==0: #gdy atrybut ma zero to usuwamy cechę
+                listColumnsToDrop.append(i-numberOfAtributtes)
 
-    estimator = SVC(kernel=individual[0], C=individual[1], degree=individual[2], gamma=individual[3],
-                    coef0=individual[4], random_state=101)
+    dfSelectedFeatures=df.drop(df.columns[listColumnsToDrop], axis=1, inplace=False)
+    
+    mms = MinMaxScaler()
+    df_norm = mms.fit_transform(dfSelectedFeatures)
+    estimator = SVC(kernel=individual[0],C=individual[1],degree=individual[2],gamma=individual[3],coef0=individual[4],random_state=101)
     resultSum = 0
     for train, test in cv.split(df_norm, y):
         estimator.fit(df_norm[train], y[train])
         predicted = estimator.predict(df_norm[test])
         expected = y[test]
-        tn, fp, fn, tp = metrics.confusion_matrix(expected,
-                                                  predicted).ravel()
-        result = (tp + tn) / (
-                tp + fp + tn + fn)  # w oparciu o macierze pomyłek
-        # https://www.dataschool.io/simple-guide-to-confusion-matrixterminology/
-        resultSum = resultSum + result  # zbieramy wyniki z poszczególnych etapów walidacji krzyżowej
+        tn, fp, fn, tp = metrics.confusion_matrix(expected, predicted).ravel()
+        result = (tp + tn) / (tp + fp + tn + fn) #w oparciu o macierze pomyłek https://www.dataschool.io/simple-guide-to-confusion-matrix-terminology/
+        resultSum = resultSum + result #zbieramy wyniki z poszczególnych etapów walidacji krzyżowej
+
     return resultSum / split,
 
 
@@ -75,7 +85,7 @@ def SVCParameters(numberFeatures, icls):
     genome.append(k)
 
     # degree
-    genome.append(random.int(0.1, 5))
+    genome.append(random.uniform(0.1, 5))
 
     # gamma
     gamma = random.uniform(0.001, 5)
@@ -84,6 +94,9 @@ def SVCParameters(numberFeatures, icls):
     # coeff
     coeff = random.uniform(0.01, 10)
     genome.append(coeff)
+
+    for _ in range(0,numberFeatures):
+        genome.append(random.randint(0, 1))
 
     return icls(genome)
 
@@ -213,7 +226,7 @@ def fitnessFunction(individual):
 
 def main():
     pd.set_option('display.max_columns', None)
-    df = pd.read_csv("data.csv", sep=';')
+    df = pd.read_csv("project04/data.csv", sep=';')
     y = df['status']
     df.drop('status', axis=1, inplace=True)
     numberOfAtributtes = len(df.columns)
@@ -224,10 +237,16 @@ def main():
     clf = SVC()
     scores = model_selection.cross_val_score(clf, df_norm, y, cv=5, scoring='accuracy', n_jobs=-1)
     print(scores.mean())
-    # '''
+
     creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
     creator.create("Individual", list, fitness=creator.FitnessMin)
     toolbox = base.Toolbox()
+
+    # if __name__ == "__main__":
+    #     pool = multiprocessing.Pool(processes=4)
+    #     toolbox.register("map", pool.map)
+
+
     # generowanie nowych osobników
     # toolbox.register('individual', individual, creator.Individual)
     toolbox.register('individual', SVCParameters, numberOfAtributtes, creator.Individual)
@@ -246,14 +265,14 @@ def main():
 
     # krzyżowanie dla rzeczywistej reprezentacji
     # toolbox.register("mate", cross_arithmetic)
-    toolbox.register("mate", cross_linear)
+    # toolbox.register("mate", cross_linear)
     # toolbox.register("mate", cross_blend_alpha)
     # toolbox.register("mate", cross_blend_alpha_beta)
     # toolbox.register("mate", cross_average)
     # dla binarnej reprezentacji
     # toolbox.register("mate", tools.cxOnePoint)
     # toolbox.register("mate", tools.cxUniform)
-    # toolbox.register("mate", tools.cxTwoPoint)
+    toolbox.register("mate", tools.cxTwoPoint)
     # definicja algorytmu mutacji
 
     # mutacja dla rzeczywistej reprezentacji
@@ -268,7 +287,7 @@ def main():
     sizePopulation = 100
     probabilityMutation = 0.6
     probabilityCrossover = 0.4
-    numberIteration = 300
+    numberIteration = 100 # <- było 300
     # generujemy początkową populację i obliczamy jej wartość funkcji dopasowania
     pop = toolbox.population(n=sizePopulation)
     fitnesses = list(map(toolbox.evaluate, pop))
@@ -310,11 +329,12 @@ def main():
             # mutate an individual with probability MUTPB
             if random.random() < probabilityMutation:
                 # toolbox.mutate(mutant, probabilityMutation)
-                toolbox.mutate(mutant, indpb=probabilityMutation)
+                toolbox.mutate(mutant)
                 del mutant.fitness.values
 
         # Evaluate the individuals with an invalid fitness
         invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
+        # fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
         fitnesses = map(toolbox.evaluate, invalid_ind)
         for ind, fit in zip(invalid_ind, fitnesses):
             ind.fitness.values = fit
@@ -335,15 +355,14 @@ def main():
         print("  Avg %s" % mean)
         print("  Std %s" % std)
         best_ind = tools.selBest(pop, 1)[0]
-        all_best_inds.append(fitnessFunction(best_ind))
+        all_best_inds.append(SVCParametersFitness(y, df, numberOfAtributtes, best_ind))
         all_fits.append(fits)
         print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
-    #
+
     print("-- End of (successful) evolution --")
     end_time = time.time()
     print(f'Evolution time: {end_time - start_time} [ms]')
     make_plots(all_best_inds, all_fits)
-    # '''
 
 
 if __name__ == '__main__':
