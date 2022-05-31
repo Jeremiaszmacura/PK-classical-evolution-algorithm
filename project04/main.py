@@ -42,8 +42,8 @@ def main():
     # clf = KNeighborsClassifier()
     # clf = MLPClassifier()
     # clf = GaussianProcessClassifier()
-    clf = DecisionTreeClassifier()
-    # clf = RandomForestClassifier()
+    # clf = DecisionTreeClassifier()
+    clf = RandomForestClassifier()
 
     # -----------classifier-1-------------------------------
     scores = model_selection.cross_val_score(clf, df_norm, y, cv=5, scoring='accuracy', n_jobs=-1)
@@ -59,8 +59,8 @@ def main():
     # toolbox.register('individual', KNeighborsClassifierParameters, numberOfAtributtes, creator.Individual)
     # toolbox.register('individual', MLPClassifierParameters, numberOfAtributtes, creator.Individual)
     # toolbox.register('individual', GaussianProcessClassifierParameters, numberOfAtributtes, creator.Individual)
-    toolbox.register('individual', DecisionTreeClassifierParameters, numberOfAtributtes, creator.Individual)
-    # toolbox.register('individual', RandomForestClassifierParameters, numberOfAtributtes, creator.Individual)
+    # toolbox.register('individual', DecisionTreeClassifierParameters, numberOfAtributtes, creator.Individual)
+    toolbox.register('individual', RandomForestClassifierParameters, numberOfAtributtes, creator.Individual)
     # -----------classifier-2-------------------------------
     toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
@@ -70,8 +70,8 @@ def main():
     # toolbox.register("evaluate", KNeighborsClassifierParametersFitness, y, df, numberOfAtributtes)
     # toolbox.register("evaluate", MLPClassifierParametersFitness, y, df, numberOfAtributtes)
     # toolbox.register("evaluate", GaussianProcessClassifierParametersFitness, y, df, numberOfAtributtes)
-    toolbox.register("evaluate", DecisionTreeClassifierParametersFitness, y, df, numberOfAtributtes)
-    # toolbox.register("evaluate", RandomForestClassifierParametersFitness, y, df, numberOfAtributtes)
+    # toolbox.register("evaluate", DecisionTreeClassifierParametersFitness, y, df, numberOfAtributtes)
+    toolbox.register("evaluate", RandomForestClassifierParametersFitness, y, df, numberOfAtributtes)
     # -----------classifier-3-------------------------------
 
     # wybieranie algorytmu selekcji
@@ -92,8 +92,8 @@ def main():
     # toolbox.register("mutate", mutationKNeighborsClassifier)
     # toolbox.register("mutate", mutationMLPClassifier)
     # toolbox.register("mutate", mutationGaussianProcessClassifier)
-    toolbox.register("mutate", mutationDecisionTreeClassifier)
-    # toolbox.register("mutate", mutationRandomForestClassifier)
+    # toolbox.register("mutate", mutationDecisionTreeClassifier)
+    toolbox.register("mutate", mutationRandomForestClassifier)
     # -----------classifier-4-------------------------------
 
     # konfiguracja parametów algorytmu genetycznego
@@ -175,8 +175,8 @@ def main():
         # all_best_inds.append(KNeighborsClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
         # all_best_inds.append(MLPClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
         # all_best_inds.append(GaussianProcessClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
-        all_best_inds.append(DecisionTreeClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
-        # all_best_inds.append(RandomForestClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
+        # all_best_inds.append(DecisionTreeClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
+        all_best_inds.append(RandomForestClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
         # -----------classifier-5-------------------------------
         all_fits.append(fits)
         print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
