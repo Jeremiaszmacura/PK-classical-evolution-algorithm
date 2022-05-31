@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 
 def make_plots(bests, individuals):
@@ -9,9 +8,6 @@ def make_plots(bests, individuals):
     fitness_function_plot(bests)
     mean_plot(individuals)
     deviation_plot(individuals)
-    df = pd.DataFrame(individuals)
-    filepath = 'data.xlsx'
-    df.to_excel(filepath, index=False)
 
 
 def fitness_function_plot(bests):
