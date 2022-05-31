@@ -10,7 +10,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
-from sklearn.svm import SVC
+from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.svm import SVC
 from sklearn.svm import SVC
 
@@ -18,9 +18,10 @@ from SVC_classifier import mutationSVC, SVCParametersFitness, SVCParameters
 from KNeighborsClassifier_classifier import mutationKNeighborsClassifier, KNeighborsClassifierParametersFitness,\
     KNeighborsClassifierParameters
 from MLPClassifier_classifier import mutationMLPClassifier, MLPClassifierParametersFitness, MLPClassifierParameters
-# from SVC_classifier import mutationSVC, SVCParametersFitness, SVCParameters
-# from SVC_classifier import mutationSVC, SVCParametersFitness, SVCParameters
-# from SVC_classifier import mutationSVC, SVCParametersFitness, SVCParameters
+from GaussianProcessClassifier_classifier import mutationGaussianProcessClassifier,\
+    GaussianProcessClassifierParametersFitness, GaussianProcessClassifierParameters
+from SVC_classifier import mutationSVC, SVCParametersFitness, SVCParameters
+from SVC_classifier import mutationSVC, SVCParametersFitness, SVCParameters
 from plots import make_plots
 
 
@@ -37,8 +38,8 @@ def main():
     # -----------classifier-1-------------------------------
     # clf = SVC()
     # clf = KNeighborsClassifier()
-    clf = MLPClassifier()
-    # clf = SVC()
+    # clf = MLPClassifier()
+    clf = GaussianProcessClassifier()
     # clf = SVC()
     # clf = SVC()
 
@@ -54,8 +55,8 @@ def main():
     # -----------classifier-2-------------------------------
     # toolbox.register('individual', SVCParameters, numberOfAtributtes, creator.Individual)
     # toolbox.register('individual', KNeighborsClassifierParameters, numberOfAtributtes, creator.Individual)
-    toolbox.register('individual', MLPClassifierParameters, numberOfAtributtes, creator.Individual)
-    # toolbox.register('individual', SVCParameters, numberOfAtributtes, creator.Individual)
+    # toolbox.register('individual', MLPClassifierParameters, numberOfAtributtes, creator.Individual)
+    toolbox.register('individual', GaussianProcessClassifierParameters, numberOfAtributtes, creator.Individual)
     # toolbox.register('individual', SVCParameters, numberOfAtributtes, creator.Individual)
     # toolbox.register('individual', SVCParameters, numberOfAtributtes, creator.Individual)
     # -----------classifier-2-------------------------------
@@ -65,8 +66,8 @@ def main():
     # -----------classifier-3-------------------------------
     # toolbox.register("evaluate", SVCParametersFitness, y, df, numberOfAtributtes)
     # toolbox.register("evaluate", KNeighborsClassifierParametersFitness, y, df, numberOfAtributtes)
-    toolbox.register("evaluate", MLPClassifierParametersFitness, y, df, numberOfAtributtes)
-    # toolbox.register("evaluate", SVCParametersFitness, y, df, numberOfAtributtes)
+    # toolbox.register("evaluate", MLPClassifierParametersFitness, y, df, numberOfAtributtes)
+    toolbox.register("evaluate", GaussianProcessClassifierParametersFitness, y, df, numberOfAtributtes)
     # toolbox.register("evaluate", SVCParametersFitness, y, df, numberOfAtributtes)
     # toolbox.register("evaluate", SVCParametersFitness, y, df, numberOfAtributtes)
     # -----------classifier-3-------------------------------
@@ -87,8 +88,8 @@ def main():
     # -----------classifier-4-------------------------------
     # toolbox.register("mutate", mutationSVC)
     # toolbox.register("mutate", mutationKNeighborsClassifier)
-    toolbox.register("mutate", mutationMLPClassifier)
-    # toolbox.register("mutate", mutationSVC)
+    # toolbox.register("mutate", mutationMLPClassifier)
+    toolbox.register("mutate", mutationGaussianProcessClassifier)
     # toolbox.register("mutate", mutationSVC)
     # toolbox.register("mutate", mutationSVC)
     # -----------classifier-4-------------------------------
@@ -170,8 +171,8 @@ def main():
         # -----------classifier-5-------------------------------
         # all_best_inds.append(SVCParametersFitness(y, df, numberOfAtributtes, best_ind))
         # all_best_inds.append(KNeighborsClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
-        all_best_inds.append(MLPClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
-        # all_best_inds.append(SVCParametersFitness(y, df, numberOfAtributtes, best_ind))
+        # all_best_inds.append(MLPClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
+        all_best_inds.append(GaussianProcessClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
         # all_best_inds.append(SVCParametersFitness(y, df, numberOfAtributtes, best_ind))
         # all_best_inds.append(SVCParametersFitness(y, df, numberOfAtributtes, best_ind))
         # -----------classifier-5-------------------------------
