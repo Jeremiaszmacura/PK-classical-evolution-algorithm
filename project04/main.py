@@ -9,15 +9,15 @@ from sklearn import model_selection
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
-# from sklearn.svm import SVC
-# from sklearn.svm import SVC
-# from sklearn.svm import SVC
-# from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier
+from sklearn.svm import SVC
+from sklearn.svm import SVC
+from sklearn.svm import SVC
 
 from SVC_classifier import mutationSVC, SVCParametersFitness, SVCParameters
 from KNeighborsClassifier_classifier import mutationKNeighborsClassifier, KNeighborsClassifierParametersFitness,\
     KNeighborsClassifierParameters
-# from SVC_classifier import mutationSVC, SVCParametersFitness, SVCParameters
+from MLPClassifier_classifier import mutationMLPClassifier, MLPClassifierParametersFitness, MLPClassifierParameters
 # from SVC_classifier import mutationSVC, SVCParametersFitness, SVCParameters
 # from SVC_classifier import mutationSVC, SVCParametersFitness, SVCParameters
 # from SVC_classifier import mutationSVC, SVCParametersFitness, SVCParameters
@@ -36,8 +36,8 @@ def main():
     df_norm = mms.fit_transform(df)
     # -----------classifier-1-------------------------------
     # clf = SVC()
-    clf = KNeighborsClassifier()
-    # clf = SVC()
+    # clf = KNeighborsClassifier()
+    clf = MLPClassifier()
     # clf = SVC()
     # clf = SVC()
     # clf = SVC()
@@ -53,8 +53,8 @@ def main():
     # generowanie nowych osobników
     # -----------classifier-2-------------------------------
     # toolbox.register('individual', SVCParameters, numberOfAtributtes, creator.Individual)
-    toolbox.register('individual', KNeighborsClassifierParameters, numberOfAtributtes, creator.Individual)
-    # toolbox.register('individual', SVCParameters, numberOfAtributtes, creator.Individual)
+    # toolbox.register('individual', KNeighborsClassifierParameters, numberOfAtributtes, creator.Individual)
+    toolbox.register('individual', MLPClassifierParameters, numberOfAtributtes, creator.Individual)
     # toolbox.register('individual', SVCParameters, numberOfAtributtes, creator.Individual)
     # toolbox.register('individual', SVCParameters, numberOfAtributtes, creator.Individual)
     # toolbox.register('individual', SVCParameters, numberOfAtributtes, creator.Individual)
@@ -64,8 +64,8 @@ def main():
     # wskazanie funkcji celu
     # -----------classifier-3-------------------------------
     # toolbox.register("evaluate", SVCParametersFitness, y, df, numberOfAtributtes)
-    toolbox.register("evaluate", KNeighborsClassifierParametersFitness, y, df, numberOfAtributtes)
-    # toolbox.register("evaluate", SVCParametersFitness, y, df, numberOfAtributtes)
+    # toolbox.register("evaluate", KNeighborsClassifierParametersFitness, y, df, numberOfAtributtes)
+    toolbox.register("evaluate", MLPClassifierParametersFitness, y, df, numberOfAtributtes)
     # toolbox.register("evaluate", SVCParametersFitness, y, df, numberOfAtributtes)
     # toolbox.register("evaluate", SVCParametersFitness, y, df, numberOfAtributtes)
     # toolbox.register("evaluate", SVCParametersFitness, y, df, numberOfAtributtes)
@@ -86,8 +86,8 @@ def main():
     # definicja algorytmu mutacji
     # -----------classifier-4-------------------------------
     # toolbox.register("mutate", mutationSVC)
-    toolbox.register("mutate", mutationKNeighborsClassifier)
-    # toolbox.register("mutate", mutationSVC)
+    # toolbox.register("mutate", mutationKNeighborsClassifier)
+    toolbox.register("mutate", mutationMLPClassifier)
     # toolbox.register("mutate", mutationSVC)
     # toolbox.register("mutate", mutationSVC)
     # toolbox.register("mutate", mutationSVC)
@@ -169,8 +169,8 @@ def main():
         best_ind = tools.selWorst(pop, 1)[0]
         # -----------classifier-5-------------------------------
         # all_best_inds.append(SVCParametersFitness(y, df, numberOfAtributtes, best_ind))
-        all_best_inds.append(KNeighborsClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
-        # all_best_inds.append(SVCParametersFitness(y, df, numberOfAtributtes, best_ind))
+        # all_best_inds.append(KNeighborsClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
+        all_best_inds.append(MLPClassifierParametersFitness(y, df, numberOfAtributtes, best_ind))
         # all_best_inds.append(SVCParametersFitness(y, df, numberOfAtributtes, best_ind))
         # all_best_inds.append(SVCParametersFitness(y, df, numberOfAtributtes, best_ind))
         # all_best_inds.append(SVCParametersFitness(y, df, numberOfAtributtes, best_ind))
