@@ -1,15 +1,17 @@
-import numpy as np
+from math import exp, sqrt, cos, pi
+
 from mealpy.bio_based.IWO import OriginalIWO
 
 
 def fitness_function(solution):
-    return np.sum(solution ** 2)
+    return -20 * exp(-0.2 * sqrt(0.5 * (solution[0] ** 2 + solution[1] ** 2))) \
+           - exp(0.5 * (cos(2 * pi * solution[0]) + cos(2 * pi * solution[1]))) + 20 + exp(1)
 
 
 problem_dict1 = {
     "fit_func": fitness_function,
-    "lb": [-10, -15, -4, -2, -8],
-    "ub": [10, 15, 12, 8, 20],
+    "lb": [-10, -10],
+    "ub": [10, 10],
     "minmax": "min",
 }
 epoch = 1000
